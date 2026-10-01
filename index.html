@@ -14,7 +14,8 @@
       <h1>Neon Grove</h1>
     </div>
     <div class="stats">
-      <span><strong id="xp">0</strong> XP</span>
+      <span><strong id="xp">0</strong> XP available</span>
+      <span><strong id="earnedXp">0</strong> lifetime XP</span>
       <span><strong id="completed">0</strong>/<strong id="totalModules">0</strong> modules</span>
       <button id="resetBtn" class="ghost" type="button">Reset progress</button>
     </div>
@@ -30,6 +31,49 @@
         <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
       </div>
 
+      <section class="forest-panel">
+        <div class="forest-head">
+          <div>
+            <p class="eyebrow">NEURAL GROVE</p>
+            <h3>Your Forest</h3>
+          </div>
+          <span id="forestLevel" class="forest-level">LVL 1</span>
+        </div>
+
+        <p class="forest-copy">
+          Master API concepts, earn XP, and grow the grove.
+          Planting costs <strong>100 XP</strong>. Lifetime XP unlocks new species.
+        </p>
+
+        <div class="xp-meter">
+          <div class="xp-meter-row">
+            <span id="levelProgressLabel">0 / 400 XP</span>
+            <span id="nextUnlockLabel">Next: Circuit Willow</span>
+          </div>
+
+          <div class="xp-meter-track">
+            <div id="levelProgressBar" class="xp-meter-fill"></div>
+          </div>
+        </div>
+
+        <p class="forest-label">Unlocked species</p>
+        <div id="speciesPicker" class="species-picker"></div>
+
+        <button id="plantTreeBtn"
+                class="primary forest-plant"
+                type="button">
+          Plant Tree · 100 XP
+        </button>
+
+        <div id="forestGrid"
+             class="forest-grid"
+             aria-label="Your futuristic forest">
+        </div>
+
+        <p id="forestHint" class="forest-hint">
+          Earn your first 100 XP and plant something.
+        </p>
+      </section>
       <nav id="moduleNav" aria-label="Course modules"></nav>
 
       <div class="side-note">
