@@ -48,6 +48,109 @@ const species = [
 ];
 
 
+const fauna = [
+
+  {
+    id: "lumen-firefly",
+    name: "Lumen Firefly",
+    icon: "✦",
+    minXp: 250,
+    minTrees: 3,
+    minFlora: 1,
+    description: "Tiny bioluminescent pollinators that appear once the grove develops its first canopy.",
+    population: context =>
+      Math.min(
+        12,
+        2 + Math.floor(
+          Math.max(0, context.trees - 3) / 2
+        )
+      )
+  },
+
+  {
+    id: "circuit-finch",
+    name: "Circuit Finch",
+    icon: "🐦",
+    minXp: 600,
+    minTrees: 6,
+    minFlora: 2,
+    description: "A small neon songbird drawn to mixed tree cover and growing biodiversity.",
+    population: context =>
+      Math.min(
+        5,
+        1 + Math.floor(
+          Math.max(0, context.trees - 6) / 4
+        )
+      )
+  },
+
+  {
+    id: "glasswing-moth",
+    name: "Glasswing Moth",
+    icon: "🦋",
+    minXp: 900,
+    minTrees: 9,
+    minFlora: 2,
+    requiredUnlock: "glasswood",
+    description: "A translucent nocturnal pollinator that arrives after Glasswood enters the ecosystem.",
+    population: context =>
+      Math.min(
+        6,
+        1 + Math.floor(
+          Math.max(0, context.trees - 9) / 3
+        )
+      )
+  },
+
+  {
+    id: "neon-hare",
+    name: "Neon Hare",
+    icon: "🐇",
+    minXp: 1200,
+    minTrees: 12,
+    minFlora: 3,
+    description: "A shy ground-dweller that requires a mature, diverse grove.",
+    population: context =>
+      Math.min(
+        4,
+        1 + Math.floor(
+          Math.max(0, context.trees - 12) / 5
+        )
+      )
+  },
+
+  {
+    id: "aurora-fox",
+    name: "Aurora Fox",
+    icon: "🦊",
+    minXp: 1600,
+    minTrees: 16,
+    minFlora: 4,
+    description: "A rare predator that only settles in a large and biologically diverse grove.",
+    population: context =>
+      Math.min(
+        2,
+        1 + Math.floor(
+          Math.max(0, context.trees - 20) / 6
+        )
+      )
+  },
+
+  {
+    id: "quantum-stag",
+    name: "Quantum Stag",
+    icon: "🦌",
+    minXp: 2200,
+    minTrees: 20,
+    minFlora: 5,
+    requiredUnlock: "quantum-sakura",
+    description: "The apex wildlife unlock: a solitary luminous stag found only in a fully developed Neon Grove.",
+    population: () => 1
+  }
+
+];
+
+
 function loadState() {
 
   const saved =
@@ -106,17 +209,13 @@ const state =
 function moduleXpEarned() {
 
   return modules.reduce(
-    (total, module) => {
-
-      if (
+    (total, module) =>
+      total +
+      (
         state.completed.includes(module.id)
-      ) {
-        return total + module.xp;
-      }
-
-      return total;
-
-    },
+          ? module.xp
+          : 0
+      ),
     0
   );
 
@@ -153,7 +252,11 @@ function currentLevel() {
     if (
       lifetimeXp() >= item.unlockXp
     ) {
-      level = item.level;
+      level =
+        Math.max(
+          level,
+          item.level
+        );
     }
 
   });
@@ -193,12 +296,132 @@ function plantedSpeciesCount() {
 }
 
 
+function ecosystemContext() {
+
+  return {
+    xp:
+      lifetimeXp(),
+
+    trees:
+      state.trees.length,
+
+    flora:
+      plantedSpeciesCount()
+  };
+
+}
+
+
+function isFaunaUnlocked(animal) {
+
+  const context =
+    ecosystemContext();
+
+
+  if (
+    context.xp < animal.minXp ||
+    context.trees < animal.minTrees ||
+    context.flora < animal.minFlora
+  ) {
+    return false;
+  }
+
+
+  if (animal.requiredUnlock) {
+
+    const required =
+      species.find(
+        item =>
+          item.id === animal.requiredUnlock
+      );
+
+    if (
+      !required ||
+      lifetimeXp() < required.unlockXp
+    ) {
+      return false;
+    }
+
+  }
+
+
+  return true;
+
+}
+
+
+function faunaPopulation(animal) {
+
+  if (
+    !isFaunaUnlocked(animal)
+  ) {
+    return 0;
+  }
+
+
+  return Math.max(
+    1,
+    animal.population(
+      ecosystemContext()
+    )
+  );
+
+}
+
+
+function totalFaunaPopulation() {
+
+  return fauna.reduce(
+    (total, animal) =>
+      total +
+      faunaPopulation(animal),
+    0
+  );
+
+}
+
+
 function nextSpecies() {
 
-  return species.find(
-    item =>
-      lifetimeXp() < item.unlockXp
-  ) || null;
+  return (
+    species.find(
+      item =>
+        lifetimeXp() <
+        item.unlockXp
+    ) || null
+  );
+
+}
+
+
+function faunaRequirementText(animal) {
+
+  const parts = [
+    `${animal.minXp} lifetime XP`,
+    `${animal.minTrees} trees`,
+    `${animal.minFlora} planted tree species`
+  ];
+
+
+  if (animal.requiredUnlock) {
+
+    const required =
+      species.find(
+        item =>
+          item.id ===
+          animal.requiredUnlock
+      );
+
+    if (required) {
+      parts.push(
+        `${required.name} unlocked`
+      );
+    }
+
+  }
+
+
+  return parts.join(" · ");
 
 }
 
@@ -229,6 +452,20 @@ function renderStats() {
       lifetimeXp();
 
 
+  const faunaStat =
+    document.querySelector(
+      "#forestFaunaPopulation"
+    );
+
+
+  if (faunaStat) {
+
+    faunaStat.textContent =
+      totalFaunaPopulation();
+
+  }
+
+
   document
     .querySelector("#groveLevel")
     .textContent =
@@ -236,10 +473,14 @@ function renderStats() {
 
 
   const summary =
-    document.querySelector("#groveSummary");
+    document.querySelector(
+      "#groveSummary"
+    );
 
 
-  if (state.trees.length === 0) {
+  if (
+    state.trees.length === 0
+  ) {
 
     summary.textContent =
       "Your grove is waiting for its first tree.";
@@ -247,9 +488,18 @@ function renderStats() {
   }
   else {
 
+    const animals =
+      totalFaunaPopulation();
+
+
     summary.textContent =
       `${state.trees.length} trees across ` +
-      `${plantedSpeciesCount()} planted species.`;
+      `${plantedSpeciesCount()} planted species` +
+      (
+        animals > 0
+          ? ` · ${animals} creatures now live here.`
+          : "."
+      );
 
   }
 
@@ -259,34 +509,41 @@ function renderStats() {
 function renderForest() {
 
   const forest =
-    document.querySelector("#forestOverview");
+    document.querySelector(
+      "#forestOverview"
+    );
+
 
   const empty =
-    document.querySelector("#emptyGrove");
+    document.querySelector(
+      "#emptyGrove"
+    );
 
 
   if (
-    state.trees.length === 0
+    state.trees.length > 0 &&
+    empty
   ) {
-    return;
+    empty.remove();
   }
-
-
-  empty.remove();
 
 
   state.trees.forEach(
     (tree, index) => {
 
       const slot =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       slot.className =
         "grove-tree-slot";
 
 
       const element =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       element.className =
         `tree ${tree.species}`;
@@ -295,7 +552,8 @@ function renderForest() {
       const treeSpecies =
         species.find(
           item =>
-            item.id === tree.species
+            item.id ===
+            tree.species
         );
 
 
@@ -304,19 +562,77 @@ function renderForest() {
 
 
       const label =
-        document.createElement("span");
+        document.createElement(
+          "span"
+        );
 
       label.textContent =
         `${index + 1}`;
 
 
-      slot.appendChild(element);
-      slot.appendChild(label);
+      slot.appendChild(
+        element
+      );
 
-      forest.appendChild(slot);
+      slot.appendChild(
+        label
+      );
+
+      forest.appendChild(
+        slot
+      );
 
     }
   );
+
+
+  fauna.forEach(animal => {
+
+    const population =
+      faunaPopulation(animal);
+
+
+    for (
+      let index = 0;
+      index < population;
+      index++
+    ) {
+
+      const slot =
+        document.createElement(
+          "div"
+        );
+
+      slot.className =
+        `fauna-slot fauna-${animal.id}`;
+
+
+      const icon =
+        document.createElement(
+          "span"
+        );
+
+      icon.className =
+        "fauna-icon";
+
+      icon.textContent =
+        animal.icon;
+
+      icon.title =
+        `${animal.name} #${index + 1}`;
+
+
+      slot.appendChild(
+        icon
+      );
+
+      forest.appendChild(
+        slot
+      );
+
+    }
+
+  });
 
 }
 
@@ -324,7 +640,9 @@ function renderForest() {
 function renderCensus() {
 
   const census =
-    document.querySelector("#speciesCensus");
+    document.querySelector(
+      "#speciesCensus"
+    );
 
 
   species.forEach(item => {
@@ -333,11 +651,14 @@ function renderCensus() {
       populationFor(item.id);
 
     const unlocked =
-      lifetimeXp() >= item.unlockXp;
+      lifetimeXp() >=
+      item.unlockXp;
 
 
     const card =
-      document.createElement("article");
+      document.createElement(
+        "article"
+      );
 
     card.className =
       "species-card" +
@@ -349,14 +670,18 @@ function renderCensus() {
 
 
     const icon =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     icon.className =
       `species-preview tree ${item.id}`;
 
 
     const info =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     info.className =
       "species-info";
@@ -413,14 +738,110 @@ function renderCensus() {
         </span>
 
       </div>
-
     `;
 
 
     card.appendChild(icon);
     card.appendChild(info);
-
     census.appendChild(card);
+
+  });
+
+}
+
+
+function renderFaunaCensus() {
+
+  const census =
+    document.querySelector(
+      "#faunaCensus"
+    );
+
+
+  if (!census) {
+    return;
+  }
+
+
+  fauna.forEach(animal => {
+
+    const unlocked =
+      isFaunaUnlocked(animal);
+
+    const population =
+      faunaPopulation(animal);
+
+
+    const card =
+      document.createElement(
+        "article"
+      );
+
+
+    card.className =
+      "fauna-card" +
+      (
+        unlocked
+          ? ""
+          : " fauna-locked"
+      );
+
+
+    card.innerHTML = `
+
+      <div class="fauna-card-icon">
+        ${animal.icon}
+      </div>
+
+      <div class="fauna-card-info">
+
+        <div class="fauna-card-title">
+
+          <div>
+
+            <span class="species-status">
+              ${
+                unlocked
+                  ? "Habitat established"
+                  : "Habitat incomplete"
+              }
+            </span>
+
+            <h3>
+              ${animal.name}
+            </h3>
+
+          </div>
+
+          <strong class="species-count">
+            ${population}
+          </strong>
+
+        </div>
+
+        <p>
+          ${animal.description}
+        </p>
+
+        <div class="species-meta">
+
+          <span>
+            Population: ${population}
+          </span>
+
+          <span>
+            ${faunaRequirementText(animal)}
+          </span>
+
+        </div>
+
+      </div>
+    `;
+
+
+    census.appendChild(
+      card
+    );
 
   });
 
@@ -436,25 +857,33 @@ function renderUnlock() {
   if (!next) {
 
     document
-      .querySelector("#nextSpeciesName")
+      .querySelector(
+        "#nextSpeciesName"
+      )
       .textContent =
-        "Full Biodiversity Achieved";
+        "Full Flora Biodiversity Achieved";
 
 
     document
-      .querySelector("#nextSpeciesText")
+      .querySelector(
+        "#nextSpeciesText"
+      )
       .textContent =
-        "Every current Neon Grove species has been unlocked.";
+        "Every current Neon Grove tree species has been unlocked.";
 
 
     document
-      .querySelector("#groveProgressText")
+      .querySelector(
+        "#groveProgressText"
+      )
       .textContent =
         `${lifetimeXp()} XP`;
 
 
     document
-      .querySelector("#groveProgressBar")
+      .querySelector(
+        "#groveProgressBar"
+      )
       .style.width =
         "100%";
 
@@ -465,30 +894,43 @@ function renderUnlock() {
 
 
   document
-    .querySelector("#nextSpeciesName")
+    .querySelector(
+      "#nextSpeciesName"
+    )
     .textContent =
       next.name;
 
 
   document
-    .querySelector("#nextSpeciesText")
+    .querySelector(
+      "#nextSpeciesText"
+    )
     .textContent =
-      `Reach ${next.unlockXp} lifetime XP to unlock this species.`;
+      `Reach ${next.unlockXp} lifetime XP to unlock this tree species.`;
 
 
   document
-    .querySelector("#groveProgressText")
+    .querySelector(
+      "#groveProgressText"
+    )
     .textContent =
       `${lifetimeXp()} / ${next.unlockXp} XP`;
 
 
+  const unlocked =
+    species.filter(
+      item =>
+        item.unlockXp <=
+        lifetimeXp()
+    );
+
+
   const previous =
-    species
-      .filter(
-        item =>
-          item.unlockXp <= lifetimeXp()
-      )
-      .at(-1);
+    unlocked.length
+      ? unlocked[
+          unlocked.length - 1
+        ]
+      : null;
 
 
   const start =
@@ -520,7 +962,9 @@ function renderUnlock() {
 
 
   document
-    .querySelector("#groveProgressBar")
+    .querySelector(
+      "#groveProgressBar"
+    )
     .style.width =
       percent + "%";
 
@@ -530,4 +974,5 @@ function renderUnlock() {
 renderStats();
 renderForest();
 renderCensus();
+renderFaunaCensus();
 renderUnlock();
