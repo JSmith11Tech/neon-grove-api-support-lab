@@ -57,12 +57,47 @@ const fauna = [
     minXp: 250,
     minTrees: 3,
     minFlora: 1,
-    description: "Tiny bioluminescent pollinators that appear once the grove develops its first canopy.",
+    description: "Tiny bioluminescent pollinators that appear beneath the grove's first developing canopy.",
     population: context =>
       Math.min(
-        12,
+        14,
         2 + Math.floor(
           Math.max(0, context.trees - 3) / 2
+        )
+      )
+  },
+
+  {
+    id: "chrome-beetle",
+    name: "Chrome Beetle",
+    icon: "🪲",
+    minXp: 350,
+    minTrees: 4,
+    minFlora: 1,
+    description: "Metallic decomposers that recycle organic matter across the forest floor.",
+    population: context =>
+      Math.min(
+        10,
+        1 + Math.floor(
+          Math.max(0, context.trees - 4) / 2
+        )
+      )
+  },
+
+  {
+    id: "circuit-frog",
+    name: "Circuit Frog",
+    icon: "🐸",
+    minXp: 500,
+    minTrees: 5,
+    minFlora: 2,
+    requiredUnlock: "circuit-willow",
+    description: "A bright amphibian that settles around the damp root systems of Circuit Willows.",
+    population: context =>
+      Math.min(
+        6,
+        1 + Math.floor(
+          Math.max(0, context.trees - 5) / 3
         )
       )
   },
@@ -74,12 +109,30 @@ const fauna = [
     minXp: 600,
     minTrees: 6,
     minFlora: 2,
-    description: "A small neon songbird drawn to mixed tree cover and growing biodiversity.",
+    description: "A neon songbird drawn to mixed tree cover and expanding biodiversity.",
     population: context =>
       Math.min(
         5,
         1 + Math.floor(
           Math.max(0, context.trees - 6) / 4
+        )
+      )
+  },
+
+  {
+    id: "neon-koi",
+    name: "Neon Koi",
+    icon: "🐟",
+    minXp: 750,
+    minTrees: 7,
+    minFlora: 2,
+    requiredUnlock: "circuit-willow",
+    description: "Glowing freshwater fish that establish a small cyber-wetland inside the grove.",
+    population: context =>
+      Math.min(
+        9,
+        2 + Math.floor(
+          Math.max(0, context.trees - 7) / 3
         )
       )
   },
@@ -92,12 +145,29 @@ const fauna = [
     minTrees: 9,
     minFlora: 2,
     requiredUnlock: "glasswood",
-    description: "A translucent nocturnal pollinator that arrives after Glasswood enters the ecosystem.",
+    description: "A translucent nocturnal pollinator that appears after Glasswood enters the ecosystem.",
     population: context =>
       Math.min(
-        6,
+        7,
         1 + Math.floor(
           Math.max(0, context.trees - 9) / 3
+        )
+      )
+  },
+
+  {
+    id: "echo-owl",
+    name: "Echo Owl",
+    icon: "🦉",
+    minXp: 1050,
+    minTrees: 10,
+    minFlora: 3,
+    description: "A quiet canopy hunter whose calls pulse softly through the grove at night.",
+    population: context =>
+      Math.min(
+        3,
+        1 + Math.floor(
+          Math.max(0, context.trees - 14) / 6
         )
       )
   },
@@ -109,12 +179,30 @@ const fauna = [
     minXp: 1200,
     minTrees: 12,
     minFlora: 3,
-    description: "A shy ground-dweller that requires a mature, diverse grove.",
+    description: "A shy ground-dweller that only appears once the grove has matured into a stable habitat.",
+    population: context =>
+      Math.min(
+        5,
+        1 + Math.floor(
+          Math.max(0, context.trees - 12) / 4
+        )
+      )
+  },
+
+  {
+    id: "phase-gecko",
+    name: "Phase Gecko",
+    icon: "🦎",
+    minXp: 1400,
+    minTrees: 14,
+    minFlora: 3,
+    requiredUnlock: "glasswood",
+    description: "A strange semi-translucent reptile that flickers at the edge of visibility as it moves between Glasswood branches.",
     population: context =>
       Math.min(
         4,
         1 + Math.floor(
-          Math.max(0, context.trees - 12) / 5
+          Math.max(0, context.trees - 14) / 4
         )
       )
   },
@@ -126,12 +214,48 @@ const fauna = [
     minXp: 1600,
     minTrees: 16,
     minFlora: 4,
-    description: "A rare predator that only settles in a large and biologically diverse grove.",
+    description: "A rare luminous predator that only settles in a large, biologically diverse grove.",
     population: context =>
       Math.min(
         2,
         1 + Math.floor(
           Math.max(0, context.trees - 20) / 6
+        )
+      )
+  },
+
+  {
+    id: "cyber-deer",
+    name: "Cyber Deer",
+    icon: "🦌",
+    minXp: 1800,
+    minTrees: 18,
+    minFlora: 4,
+    requiredUnlock: "aurora-cedar",
+    description: "A small herd of luminous cybernetic deer that settles into mature forests with dense cover and high biodiversity.",
+    population: context =>
+      Math.min(
+        3,
+        1 + Math.floor(
+          Math.max(0, context.trees - 18) / 5
+        )
+      )
+  },
+
+  {
+    id: "data-wisp",
+    name: "Data Wisp",
+    icon: "◉",
+    minXp: 2000,
+    minTrees: 18,
+    minFlora: 5,
+    requiredUnlock: "quantum-sakura",
+    description: "An unexplained floating lifeform made of pulsing light and fragmented digital patterns. Its biology remains unclear.",
+    population: context =>
+      Math.min(
+        4,
+        1 + Math.floor(
+          Math.max(0, context.trees - 18) / 3
         )
       )
   },
@@ -144,7 +268,7 @@ const fauna = [
     minTrees: 20,
     minFlora: 5,
     requiredUnlock: "quantum-sakura",
-    description: "The apex wildlife unlock: a solitary luminous stag found only in a fully developed Neon Grove.",
+    description: "The rarest known creature in Neon Grove: a solitary luminous stag found only in a fully developed ecosystem.",
     population: () => 1
   }
 

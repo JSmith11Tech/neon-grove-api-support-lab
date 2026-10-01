@@ -118,3 +118,9 @@ This is an independent educational portfolio project. It is not affiliated with 
 ## License
 
 MIT
+
+## Neon Grove ecosystem
+
+The learning progression also drives a 13-species wildlife ecosystem. Fauna arrives automatically as lifetime XP, tree population, and botanical biodiversity increase.
+
+Current wildlife includes fireflies, beetles, frogs, finches, koi, moths, owls, hares, geckos, foxes, Cyber Deer, Data Wisps, and the rare Quantum Stag.

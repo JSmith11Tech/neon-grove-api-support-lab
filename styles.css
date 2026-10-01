@@ -1596,3 +1596,131 @@ code {
   }
 
 }
+/* =========================================================
+   NEON GROVE EXPANDED FAUNA
+   ========================================================= */
+
+/* Forest floor */
+
+.fauna-chrome-beetle .fauna-icon {
+  font-size: 1.25rem;
+  transform: translateY(4px);
+}
+
+.fauna-circuit-frog .fauna-icon {
+  font-size: 1.45rem;
+  transform: translateY(3px);
+  filter:
+    drop-shadow(
+      0 0 8px
+      rgba(76,255,154,.65)
+    );
+}
+
+/* Wetland */
+
+.fauna-neon-koi {
+  min-height: 58px;
+  border-radius: 50% 50% 35% 35%;
+  background:
+    radial-gradient(
+      ellipse at center bottom,
+      rgba(70,255,220,.20),
+      rgba(17,114,91,.12) 52%,
+      transparent 55%
+    );
+}
+
+.fauna-neon-koi .fauna-icon {
+  font-size: 1.45rem;
+  transform: translateY(2px);
+  filter:
+    drop-shadow(
+      0 0 9px
+      rgba(77,255,213,.7)
+    );
+}
+
+/* Canopy */
+
+.fauna-echo-owl .fauna-icon {
+  font-size: 1.65rem;
+  transform: translateY(-30px);
+  filter:
+    drop-shadow(
+      0 0 8px
+      rgba(178,255,207,.45)
+    );
+}
+
+/* Strange fauna */
+
+.fauna-phase-gecko .fauna-icon {
+  font-size: 1.45rem;
+  transform: translateY(-12px);
+  opacity: .82;
+  filter:
+    drop-shadow(
+      0 0 10px
+      rgba(151,255,210,.65)
+    );
+}
+
+.fauna-cyber-deer .fauna-icon {
+  font-size: 1.9rem;
+  transform: translateY(1px);
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(76,255,154,.75)
+    )
+    drop-shadow(
+      0 0 15px
+      rgba(178,255,207,.25)
+    );
+}
+
+.fauna-data-wisp .fauna-icon {
+  font-size: 1.35rem;
+  color: #b2ffcf;
+  transform: translateY(-28px);
+  animation:
+    data-wisp-pulse
+    2.8s
+    ease-in-out
+    infinite;
+}
+
+@keyframes data-wisp-pulse {
+
+  0%,
+  100% {
+    opacity: .35;
+
+    filter:
+      drop-shadow(
+        0 0 5px
+        rgba(76,255,154,.35)
+      );
+  }
+
+  50% {
+    opacity: 1;
+
+    filter:
+      drop-shadow(
+        0 0 16px
+        rgba(178,255,207,.95)
+      );
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fauna-data-wisp .fauna-icon {
+    animation: none;
+    opacity: 1;
+  }
+
+}
