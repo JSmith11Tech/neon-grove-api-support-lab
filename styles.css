@@ -1024,3 +1024,382 @@ code {
       );
   }
 }
+/* =========================================================
+   NEON GROVE OVERVIEW PAGE
+   ========================================================= */
+
+.forest-map-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 14px;
+}
+
+.forest-map-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.forest-map-link:hover .forest-grid {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 24px
+    rgba(76,255,154,.12);
+}
+
+.forest-open-label {
+  display: block;
+  margin: .5rem 0 .1rem;
+  text-align: center;
+  color: var(--accent2);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.grove-back {
+  text-decoration: none;
+}
+
+.grove-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.grove-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.grove-hero h2 {
+  margin: .25rem 0 .65rem;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+}
+
+.grove-hero > div:first-child > p:last-child {
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.grove-level-badge {
+  min-width: 150px;
+  padding: 1.2rem;
+  text-align: center;
+  border: 1px solid #287653;
+  border-radius: 18px;
+  background: rgba(76,255,154,.06);
+}
+
+.grove-level-badge span {
+  display: block;
+  color: var(--muted);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  font-weight: 800;
+}
+
+.grove-level-badge strong {
+  display: block;
+  margin-top: .25rem;
+  color: var(--accent2);
+  font-size: 3rem;
+}
+
+.grove-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .8rem;
+  margin-bottom: 1.5rem;
+}
+
+.grove-stat {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(11,39,29,.94),
+      rgba(5,23,16,.96)
+    );
+}
+
+.grove-stat > span {
+  display: block;
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.grove-stat strong {
+  display: block;
+  margin: .3rem 0;
+  color: var(--text);
+  font-size: 2rem;
+}
+
+.grove-stat small {
+  color: var(--muted);
+}
+
+.grove-main-panel {
+  margin: 1rem 0;
+  padding: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(11,39,29,.94),
+      rgba(5,23,16,.97)
+    );
+}
+
+.grove-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.grove-panel-heading h2 {
+  margin: .25rem 0 0;
+}
+
+.grove-summary {
+  max-width: 430px;
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+  font-size: .85rem;
+}
+
+.grove-canvas {
+  min-height: 360px;
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(58px, 1fr)
+    );
+  gap: .8rem;
+  align-items: end;
+  padding: 2rem 1.2rem 1rem;
+  overflow: hidden;
+  border: 1px solid #1e6849;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at 50% 115%,
+      rgba(76,255,154,.20),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 16% 20%,
+      rgba(178,255,207,.07),
+      transparent 16rem
+    ),
+    linear-gradient(
+      180deg,
+      #04110c 0 70%,
+      #082519 71% 100%
+    );
+}
+
+.grove-tree-slot {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-items: end;
+}
+
+.grove-tree-slot .tree {
+  transform: scale(1.25);
+  transform-origin: bottom center;
+  margin-bottom: .4rem;
+}
+
+.grove-tree-slot span {
+  margin-top: .25rem;
+  color: #5f8e78;
+  font-size: .58rem;
+}
+
+.grove-empty {
+  grid-column: 1 / -1;
+  align-self: center;
+  justify-self: center;
+  max-width: 400px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.grove-empty strong {
+  display: block;
+  margin: .5rem 0;
+  color: var(--text);
+}
+
+.grove-seed {
+  display: block;
+  color: var(--accent);
+  font-size: 3rem;
+}
+
+.species-census {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap: .8rem;
+}
+
+.species-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #1a563e;
+  border-radius: 16px;
+  background: rgba(0,0,0,.12);
+}
+
+.species-card.species-locked {
+  opacity: .45;
+}
+
+.species-preview {
+  margin: 0 auto;
+  transform: scale(1.15);
+}
+
+.species-info {
+  min-width: 0;
+}
+
+.species-card-title {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  align-items: start;
+}
+
+.species-card h3 {
+  margin: .15rem 0 .35rem;
+}
+
+.species-card p {
+  margin: 0 0 .7rem;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+
+.species-status {
+  color: var(--accent);
+  font-size: .63rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.species-count {
+  min-width: 42px;
+  text-align: right;
+  color: var(--accent2);
+  font-size: 1.75rem;
+}
+
+.species-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.species-meta span {
+  padding: .3rem .45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: .65rem;
+}
+
+.grove-unlock-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.grove-unlock-row p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.grove-unlock-meter {
+  min-width: 0;
+}
+
+
+@media (max-width: 820px) {
+
+  .grove-shell {
+    padding: 1rem;
+  }
+
+  .grove-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .grove-level-badge {
+    width: 140px;
+  }
+
+  .grove-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .species-census {
+    grid-template-columns: 1fr;
+  }
+
+  .grove-panel-heading,
+  .grove-unlock-row {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .grove-summary {
+    text-align: left;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .grove-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .species-card {
+    grid-template-columns: 54px 1fr;
+  }
+
+  .grove-canvas {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(44px, 1fr)
+      );
+  }
+
+}

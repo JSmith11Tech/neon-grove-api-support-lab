@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1" />
+
+  <meta name="description"
+        content="Neon Grove forest overview and species population." />
+
+  <title>
+    Neon Grove · Grove Overview
+  </title>
+
+  <link rel="stylesheet"
+        href="styles.css" />
+
+</head>
+
+<body class="grove-page">
+
+  <header class="topbar grove-topbar">
+
+    <div>
+
+      <p class="eyebrow">
+        NEON GROVE
+      </p>
+
+      <h1>
+        Grove Overview
+      </h1>
+
+    </div>
+
+    <a class="secondary grove-back"
+       href="index.html">
+
+      ← Return to Learning Lab
+
+    </a>
+
+  </header>
+
+
+  <main class="grove-shell">
+
+    <section class="grove-hero">
+
+      <div>
+
+        <p class="eyebrow">
+          LIVING KNOWLEDGE SYSTEM
+        </p>
+
+        <h2>
+          Your Neon Grove
+        </h2>
+
+        <p>
+          Every tree represents XP you earned by learning,
+          practicing, and solving API problems.
+          As your knowledge grows, the ecosystem gets more diverse.
+        </p>
+
+      </div>
+
+      <div class="grove-level-badge">
+
+        <span>
+          GROVE LEVEL
+        </span>
+
+        <strong id="groveLevel">
+          1
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <section class="grove-stat-grid">
+
+      <article class="grove-stat">
+
+        <span>
+          Tree Population
+        </span>
+
+        <strong id="forestTotalTrees">
+          0
+        </strong>
+
+        <small>
+          trees planted
+        </small>
+
+      </article>
+
+
+      <article class="grove-stat">
+
+        <span>
+          Species Unlocked
+        </span>
+
+        <strong id="forestUnlockedSpecies">
+          1 / 5
+        </strong>
+
+        <small>
+          available species
+        </small>
+
+      </article>
+
+
+      <article class="grove-stat">
+
+        <span>
+          Species Population
+        </span>
+
+        <strong id="forestPlantedSpecies">
+          0
+        </strong>
+
+        <small>
+          species currently growing
+        </small>
+
+      </article>
+
+
+      <article class="grove-stat">
+
+        <span>
+          Lifetime XP
+        </span>
+
+        <strong id="forestLifetimeXp">
+          0
+        </strong>
+
+        <small>
+          knowledge earned
+        </small>
+
+      </article>
+
+    </section>
+
+
+    <section class="grove-main-panel">
+
+      <div class="grove-panel-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            FOREST MAP
+          </p>
+
+          <h2>
+            Current Grove
+          </h2>
+
+        </div>
+
+        <p id="groveSummary"
+           class="grove-summary">
+
+          Your grove is waiting for its first tree.
+
+        </p>
+
+      </div>
+
+
+      <div id="forestOverview"
+           class="grove-canvas"
+           aria-label="Full Neon Grove forest">
+
+        <div id="emptyGrove"
+             class="grove-empty">
+
+          <span class="grove-seed">
+            ◇
+          </span>
+
+          <strong>
+            The grove is empty.
+          </strong>
+
+          <p>
+            Earn 100 XP in the learning lab
+            and plant your first Neon Pine.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="grove-main-panel">
+
+      <div class="grove-panel-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            SPECIES DATABASE
+          </p>
+
+          <h2>
+            Population Census
+          </h2>
+
+        </div>
+
+        <p class="grove-summary">
+          Unlocked species remain available even after you spend XP.
+        </p>
+
+      </div>
+
+
+      <div id="speciesCensus"
+           class="species-census">
+      </div>
+
+    </section>
+
+
+    <section class="grove-main-panel">
+
+      <div class="grove-panel-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            BIODIVERSITY
+          </p>
+
+          <h2>
+            Next Unlock
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="grove-unlock-row">
+
+        <div>
+
+          <strong id="nextSpeciesName">
+            Circuit Willow
+          </strong>
+
+          <p id="nextSpeciesText">
+            Reach 400 lifetime XP to unlock this species.
+          </p>
+
+        </div>
+
+
+        <div class="grove-unlock-meter">
+
+          <div class="xp-meter-row">
+
+            <span id="groveProgressText">
+              0 / 400 XP
+            </span>
+
+          </div>
+
+          <div class="xp-meter-track">
+
+            <div id="groveProgressBar"
+                 class="xp-meter-fill">
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script src="data/lessons.js"></script>
+  <script src="forest.js"></script>
+
+</body>
+
+</html>
