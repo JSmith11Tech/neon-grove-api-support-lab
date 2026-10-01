@@ -2100,3 +2100,104 @@ code {
   }
 
 }
+/* =========================================================
+   PORTFOLIO MODE TOGGLE
+   ========================================================= */
+
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+
+  padding: .22rem;
+
+  border: 1px solid var(--line);
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.20);
+}
+
+.mode-option {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: .45rem .75rem;
+
+  border-radius: 999px;
+
+  color: var(--muted);
+
+  text-decoration: none;
+
+  font-size: .74rem;
+  font-weight: 800;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease;
+}
+
+.mode-option:hover {
+  color: var(--text);
+}
+
+.mode-option.active {
+  color: #04110c;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  box-shadow:
+    0 0 12px
+    rgba(76,255,154,.18);
+}
+
+
+/* Technical mode uses a neutral active treatment */
+
+.technical-page .mode-toggle {
+  border-color: #34404a;
+
+  background: #080d12;
+}
+
+.technical-page .mode-option {
+  color: #9aa8b4;
+}
+
+.technical-page .mode-option:hover {
+  color: #edf2f7;
+}
+
+.technical-page .mode-option.active {
+  color: #0b0f13;
+
+  background: #d9e1e7;
+
+  box-shadow: none;
+}
+
+
+.technical-mode-toggle {
+  margin-left: auto;
+}
+
+
+@media (max-width: 760px) {
+
+  .mode-toggle {
+    width: 100%;
+  }
+
+  .mode-option {
+    flex: 1;
+  }
+
+}
