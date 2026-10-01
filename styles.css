@@ -2201,3 +2201,11 @@ code {
   }
 
 }
+
+.recruiter-view-description {
+  margin: .45rem 0 0;
+  color: #9aa8b4;
+  font-size: .78rem;
+  line-height: 1.45;
+  max-width: 520px;
+}
