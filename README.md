@@ -1,6 +1,6 @@
-# API Support Lab
+# Neon Grove: API Support Lab
 
-An interactive, browser-based learning lab for practicing the API troubleshooting skills used in Technical Support, Product Support, Application Support, and Support Engineering roles.
+Neon Grove is a gamified API Support Engineering Lab where learners earn XP, grow a futuristic forest, unlock new tree species, and practice the API troubleshooting skills used in Technical Support, Product Support, Application Support, and Support Engineering roles.
 
 **Live demo:** Add your GitHub Pages URL here after deployment.
 

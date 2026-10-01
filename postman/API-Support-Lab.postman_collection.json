@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "4d1e9198-a7d1-4c1f-99d4-portfolio-api-support-lab",
-    "name": "API Support Lab",
+    "name": "Neon Grove: API Support Lab",
     "description": "Sanitized practice collection for the API Support Lab portfolio project. Uses Postman Echo; contains no real credentials.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
