@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive API troubleshooting lab for learning REST APIs, HTTP, JSON, authentication, Postman, and support-engineering workflows." />
+  <title>API Support Lab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">PORTFOLIO LEARNING PROJECT</p>
+      <h1>API Support Lab</h1>
+    </div>
+    <div class="stats">
+      <span><strong id="xp">0</strong> XP</span>
+      <span><strong id="completed">0</strong>/<strong id="totalModules">0</strong> modules</span>
+      <button id="resetBtn" class="ghost" type="button">Reset progress</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar">
+      <div class="progress-card">
+        <div class="progress-label">
+          <span>Overall progress</span>
+          <span id="progressPct">0%</span>
+        </div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+
+      <nav id="moduleNav" aria-label="Course modules"></nav>
+
+      <div class="side-note">
+        <strong>Support Engineer Mode</strong>
+        <p>Learn it. Use it. Break it. Diagnose it.</p>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div id="hero" class="hero"></div>
+      <div id="lesson"></div>
+    </section>
+  </main>
+
+  <footer>
+    Independent educational portfolio project. References official Postman documentation; not affiliated with or endorsed by Postman.
+  </footer>
+
+  <script src="data/lessons.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{
+  "info": {
+    "_postman_id": "4d1e9198-a7d1-4c1f-99d4-portfolio-api-support-lab",
+    "name": "API Support Lab",
+    "description": "Sanitized practice collection for the API Support Lab portfolio project. Uses Postman Echo; contains no real credentials.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Requests & Responses",
+      "item": [
+        {
+          "name": "GET - Inspect query parameters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/get?customer_id={{customer_id}}&status=open",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "get"
+              ],
+              "query": [
+                {
+                  "key": "customer_id",
+                  "value": "{{customer_id}}"
+                },
+                {
+                  "key": "status",
+                  "value": "open"
+                }
+              ]
+            },
+            "description": "Practice inspecting how query parameters are sent and echoed back."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST - Send JSON body",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"priority\": \"high\",\n  \"notify\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/post",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "post"
+              ]
+            },
+            "description": "Practice sending a JSON body and inspecting what the server received."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Headers & Auth Concepts",
+      "item": [
+        {
+          "name": "GET - Custom support header",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Lab-Case",
+                "value": "{{case_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/headers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "headers"
+              ]
+            },
+            "description": "Inspect a custom request header. This is for practice only; do not send real customer identifiers."
+          }
+        }
+      ]
+    }
+  ]
+}
