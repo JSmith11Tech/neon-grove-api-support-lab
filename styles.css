@@ -1724,3 +1724,379 @@ code {
   }
 
 }
+/* =========================================================
+   TECHNICAL RECRUITER VIEW
+   ========================================================= */
+
+.recruiter-view-link {
+  display: inline-block;
+  margin-top: .4rem;
+  color: var(--accent2);
+  text-decoration: none;
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.recruiter-view-link:hover {
+  text-decoration: underline;
+}
+
+
+.technical-page {
+  background: #0b0f13;
+  color: #edf2f7;
+}
+
+
+.technical-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: center;
+
+  padding: 1.25rem 2rem;
+
+  border-bottom: 1px solid #29323b;
+
+  background: #0d1218;
+}
+
+
+.technical-topbar h1 {
+  margin: .2rem 0 0;
+}
+
+
+.technical-kicker {
+  margin: 0;
+
+  color: #9aa7b3;
+
+  font-size: .7rem;
+  font-weight: 800;
+
+  letter-spacing: .14em;
+}
+
+
+.technical-nav {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+}
+
+
+.technical-nav a {
+  padding: .55rem .75rem;
+
+  border: 1px solid #34404a;
+  border-radius: 9px;
+
+  color: #edf2f7;
+  text-decoration: none;
+
+  font-size: .82rem;
+}
+
+
+.technical-nav a:hover {
+  border-color: #8da0b0;
+}
+
+
+.technical-shell {
+  width: min(1180px, 100%);
+
+  margin: 0 auto;
+
+  padding: 2.5rem 2rem 5rem;
+}
+
+
+.technical-hero {
+  padding: 3rem 0;
+
+  border-bottom: 1px solid #28313a;
+}
+
+
+.technical-hero h2 {
+  max-width: 900px;
+
+  margin: .5rem 0 1rem;
+
+  font-size: clamp(2.2rem, 5vw, 4.3rem);
+
+  line-height: 1.06;
+}
+
+
+.technical-hero p:last-child {
+  max-width: 760px;
+
+  color: #aab6c0;
+
+  line-height: 1.7;
+}
+
+
+.technical-section {
+  padding: 3rem 0;
+
+  border-bottom: 1px solid #28313a;
+}
+
+
+.technical-heading {
+  margin-bottom: 1.4rem;
+}
+
+
+.technical-heading h2 {
+  margin: .35rem 0 0;
+
+  font-size: 1.8rem;
+}
+
+
+.technical-skill-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: .7rem;
+}
+
+
+.technical-skill-grid article {
+  padding: 1rem;
+
+  border: 1px solid #2e3943;
+  border-radius: 12px;
+
+  background: #11171d;
+}
+
+
+.technical-skill-grid strong {
+  display: block;
+
+  margin-bottom: .35rem;
+}
+
+
+.technical-skill-grid span {
+  color: #98a7b3;
+
+  font-size: .8rem;
+
+  line-height: 1.45;
+}
+
+
+.artifact-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: .8rem;
+}
+
+
+.artifact-card {
+  display: block;
+
+  padding: 1.2rem;
+
+  border: 1px solid #33404a;
+  border-radius: 14px;
+
+  color: #edf2f7;
+
+  text-decoration: none;
+
+  background: #10161c;
+}
+
+
+.artifact-card:hover {
+  border-color: #8595a3;
+}
+
+
+.artifact-card strong {
+  display: block;
+
+  margin: .3rem 0 .5rem;
+
+  font-size: 1.05rem;
+}
+
+
+.artifact-card p {
+  color: #9caab5;
+
+  line-height: 1.5;
+}
+
+
+.artifact-type {
+  color: #8fa0ae;
+
+  font-size: .65rem;
+  font-weight: 900;
+
+  letter-spacing: .13em;
+}
+
+
+.artifact-action {
+  color: #c6d2dc;
+
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+
+.workflow-list {
+  display: grid;
+  gap: .65rem;
+}
+
+
+.workflow-list article {
+  display: grid;
+
+  grid-template-columns: 52px 1fr;
+
+  gap: 1rem;
+
+  padding: 1rem 0;
+}
+
+
+.workflow-list > article > span {
+  color: #728290;
+
+  font-family: monospace;
+
+  font-size: 1rem;
+}
+
+
+.workflow-list strong {
+  display: block;
+
+  margin-bottom: .25rem;
+}
+
+
+.workflow-list p {
+  margin: 0;
+
+  color: #98a7b3;
+
+  line-height: 1.55;
+}
+
+
+.case-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: .8rem;
+}
+
+
+.case-grid article {
+  padding: 1.1rem;
+
+  border: 1px solid #313d46;
+  border-radius: 12px;
+
+  background: #10161c;
+}
+
+
+.case-grid code {
+  color: #aab8c4;
+}
+
+
+.case-grid h3 {
+  margin: .65rem 0 .4rem;
+}
+
+
+.case-grid p {
+  margin: 0;
+
+  color: #98a7b3;
+
+  font-size: .82rem;
+
+  line-height: 1.5;
+}
+
+
+.technical-next {
+  border-bottom: 0;
+}
+
+
+.technical-next p:last-child {
+  max-width: 720px;
+
+  color: #9eacb7;
+
+  line-height: 1.6;
+}
+
+
+@media (max-width: 800px) {
+
+  .technical-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .technical-shell {
+    padding:
+      1.5rem 1rem 4rem;
+  }
+
+  .technical-skill-grid,
+  .case-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .technical-skill-grid,
+  .artifact-grid,
+  .case-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+}
