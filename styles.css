@@ -2650,3 +2650,97 @@ code {
   }
 
 }
+/* =========================================================
+   INDIVIDUAL TREE GROWTH
+   ========================================================= */
+
+.tree {
+  transform-origin: center bottom;
+
+  transition:
+    scale .35s ease,
+    opacity .35s ease;
+}
+
+
+/* Newly planted */
+.tree.growth-seed {
+  scale: .20;
+
+  opacity: .48;
+}
+
+
+/* +50 XP after planting */
+.tree.growth-sprout {
+  scale: .42;
+
+  opacity: .70;
+}
+
+
+/* +125 XP after planting */
+.tree.growth-sapling {
+  scale: .70;
+
+  opacity: .88;
+}
+
+
+/* +250 XP after planting */
+.tree.growth-mature {
+  scale: 1;
+
+  opacity: 1;
+}
+
+
+.growth-stage-legend {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: .65rem;
+
+  margin-top: 1rem;
+}
+
+
+.growth-stage-legend span {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+
+  padding: .7rem .8rem;
+
+  border:
+    1px solid
+    rgba(88, 190, 137, .27);
+
+  border-radius: 10px;
+
+  color: #9db9ad;
+
+  background:
+    rgba(8, 35, 25, .5);
+
+  font-size: .72rem;
+}
+
+
+.growth-stage-legend strong {
+  color: #b8ffd5;
+
+  font-size: 1.05rem;
+}
+
+
+@media (max-width: 650px) {
+
+  .growth-stage-legend {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}

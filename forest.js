@@ -275,6 +275,83 @@ const fauna = [
 ];
 
 
+const TREE_GROWTH_STAGES = [
+
+  {
+    id: "seed",
+    label: "Seed",
+    minXp: 0
+  },
+
+  {
+    id: "sprout",
+    label: "Sprout",
+    minXp: 50
+  },
+
+  {
+    id: "sapling",
+    label: "Sapling",
+    minXp: 125
+  },
+
+  {
+    id: "mature",
+    label: "Mature",
+    minXp: 250
+  }
+
+];
+
+
+function treeGrowthStage(tree) {
+
+  const plantedAt =
+    Number(
+      tree.plantedAtXp || 0
+    );
+
+
+  const gained =
+    Math.max(
+      0,
+      lifetimeXp() - plantedAt
+    );
+
+
+  let stage =
+    TREE_GROWTH_STAGES[0];
+
+
+  TREE_GROWTH_STAGES.forEach(
+    candidate => {
+
+      if (
+        gained >= candidate.minXp
+      ) {
+        stage = candidate;
+      }
+
+    }
+  );
+
+
+  return {
+    id:
+      stage.id,
+
+    label:
+      stage.label,
+
+    minXp:
+      stage.minXp,
+
+    gained:
+      gained
+  };
+
+}
+
 function loadState() {
 
   const saved =
@@ -357,11 +434,43 @@ function quizXpEarned() {
 }
 
 
+function handsOnXpEarned() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        "neon-grove-practice-state"
+      );
+
+    if (!raw) {
+      return 0;
+    }
+
+    const practice =
+      JSON.parse(raw);
+
+    return (
+      Object.values(
+        practice.completed || {}
+      )
+        .filter(Boolean)
+        .length * 50
+    );
+
+  }
+  catch {
+    return 0;
+  }
+
+}
+
 function lifetimeXp() {
 
   return (
     moduleXpEarned() +
-    quizXpEarned()
+    quizXpEarned() +
+    handsOnXpEarned()
   );
 
 }
@@ -630,6 +739,92 @@ function renderStats() {
 }
 
 
+function renderGrowthStages() {
+
+  const summary =
+    document.querySelector(
+      "#groveSummary"
+    );
+
+
+  if (!summary) {
+    return;
+  }
+
+
+  let legend =
+    document.querySelector(
+      "#growthStageLegend"
+    );
+
+
+  if (!legend) {
+
+    legend =
+      document.createElement(
+        "div"
+      );
+
+    legend.id =
+      "growthStageLegend";
+
+    legend.className =
+      "growth-stage-legend";
+
+    summary.insertAdjacentElement(
+      "afterend",
+      legend
+    );
+
+  }
+
+
+  const counts = {
+    seed: 0,
+    sprout: 0,
+    sapling: 0,
+    mature: 0
+  };
+
+
+  state.trees.forEach(
+    tree => {
+
+      const growth =
+        treeGrowthStage(tree);
+
+      counts[growth.id] += 1;
+
+    }
+  );
+
+
+  legend.innerHTML = `
+
+    <span>
+      <strong>${counts.seed}</strong>
+      Seeds
+    </span>
+
+    <span>
+      <strong>${counts.sprout}</strong>
+      Sprouts
+    </span>
+
+    <span>
+      <strong>${counts.sapling}</strong>
+      Saplings
+    </span>
+
+    <span>
+      <strong>${counts.mature}</strong>
+      Mature
+    </span>
+
+  `;
+
+}
+
 function renderForest() {
 
   const forest =
@@ -669,8 +864,19 @@ function renderForest() {
           "div"
         );
 
+      const growth =
+        treeGrowthStage(tree);
+
       element.className =
-        `tree ${tree.species}`;
+        `tree ${tree.species} growth-${growth.id}`;
+
+      element.dataset.growthStage =
+        growth.label;
+
+      element.dataset.growthXp =
+        String(
+          growth.gained
+        );
 
 
       const treeSpecies =
@@ -682,7 +888,7 @@ function renderForest() {
 
 
       element.title =
-        `${treeSpecies?.name || "Tree"} #${index + 1}`;
+        `${treeSpecies?.name || "Tree"} #${index + 1} · ${growth.label} · ${growth.gained} XP since planting`;
 
 
       const label =

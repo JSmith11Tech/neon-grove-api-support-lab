@@ -38,6 +38,83 @@ const species = [
   }
 ];
 
+const TREE_GROWTH_STAGES = [
+
+  {
+    id: "seed",
+    label: "Seed",
+    minXp: 0
+  },
+
+  {
+    id: "sprout",
+    label: "Sprout",
+    minXp: 50
+  },
+
+  {
+    id: "sapling",
+    label: "Sapling",
+    minXp: 125
+  },
+
+  {
+    id: "mature",
+    label: "Mature",
+    minXp: 250
+  }
+
+];
+
+
+function treeGrowthStage(tree) {
+
+  const plantedAt =
+    Number(
+      tree.plantedAtXp || 0
+    );
+
+
+  const gained =
+    Math.max(
+      0,
+      lifetimeXp() - plantedAt
+    );
+
+
+  let stage =
+    TREE_GROWTH_STAGES[0];
+
+
+  TREE_GROWTH_STAGES.forEach(
+    candidate => {
+
+      if (
+        gained >= candidate.minXp
+      ) {
+        stage = candidate;
+      }
+
+    }
+  );
+
+
+  return {
+    id:
+      stage.id,
+
+    label:
+      stage.label,
+
+    minXp:
+      stage.minXp,
+
+    gained:
+      gained
+  };
+
+}
+
 function freshState() {
   return {
     completed: [],
@@ -147,7 +224,9 @@ function handsOnXpEarned() {
 
 function lifetimeXp() {
   return (
-    moduleXpEarned() +`r`n    quizXpEarned() +`r`n    handsOnXpEarned()
+    moduleXpEarned() +
+    quizXpEarned() +
+    handsOnXpEarned()
   );
 }
 
@@ -317,8 +396,19 @@ function updateForest() {
       const element =
         document.createElement("div");
 
+      const growth =
+        treeGrowthStage(tree);
+
       element.className =
-        `tree ${tree.species}`;
+        `tree ${tree.species} growth-${growth.id}`;
+
+      element.dataset.growthStage =
+        growth.label;
+
+      element.dataset.growthXp =
+        String(
+          growth.gained
+        );
 
       const treeSpecies =
         species.find(
@@ -327,7 +417,7 @@ function updateForest() {
         );
 
       element.title =
-        `${treeSpecies?.name || "Tree"} #${index + 1}`;
+        `${treeSpecies?.name || "Tree"} #${index + 1} · ${growth.label} · ${growth.gained} XP since planting`;
 
       forest.appendChild(element);
     }
@@ -348,7 +438,7 @@ function updateForest() {
     plantButton.disabled = false;
 
     plantButton.textContent =
-      `Plant ${selected.name} · ${TREE_COST} XP`;
+      `Plant ${selected.name} seed · ${TREE_COST} XP`;
   }
   else {
     plantButton.disabled = true;
