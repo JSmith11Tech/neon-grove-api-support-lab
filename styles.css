@@ -2415,3 +2415,27 @@ code {
   }
 
 }
+.narration-preview {
+  min-height: 38px;
+
+  padding: .42rem .68rem;
+
+  border: 1px solid #34785a;
+  border-radius: 8px;
+
+  color: var(--accent2);
+
+  background:
+    rgba(76,255,154,.055);
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.narration-preview:hover {
+  border-color: var(--accent);
+
+  background:
+    rgba(76,255,154,.11);
+}

@@ -198,6 +198,13 @@
       );
 
 
+
+    document
+      .querySelector("#previewVoice")
+      .addEventListener(
+        "click",
+        previewSelectedVoice
+      );
     document
       .querySelector("#stopNarration")
       .addEventListener(
@@ -220,79 +227,133 @@
     const lang =
       voice.lang.toLowerCase();
 
+
+    if (
+      !lang.startsWith("en")
+    ) {
+      return -10000;
+    }
+
+
     let score = 0;
 
 
-    // Prefer US English.
+    // Strong preference for US English.
     if (
       lang === "en-us"
     ) {
-      score += 100;
-    }
-    else if (
-      lang.startsWith("en")
-    ) {
-      score += 30;
+      score += 500;
     }
     else {
-      return -1000;
+      score += 100;
     }
 
 
-    // Google voice.
+    // Natural / neural engines first.
     if (
-      name.includes(
-        "google us english"
-      )
+      name.includes("natural")
     ) {
-      score += 250;
+      score += 1000;
     }
 
 
-    // Microsoft natural / neural voices.
     if (
-      name.includes("natural") ||
       name.includes("neural")
     ) {
-      score += 190;
+      score += 1000;
     }
 
 
-    // Common natural-sounding female voices.
-    const preferredNames = [
+    // Google voices generally sound better than
+    // older system TTS voices when available.
+    if (
+      name.includes("google")
+    ) {
+      score += 800;
+    }
+
+
+    // Favor common modern female US voices.
+    const preferred = [
       "aria",
-      "jenny",
       "ava",
+      "jenny",
       "emma",
+      "michelle",
       "samantha",
       "zira",
       "female"
     ];
 
-    preferredNames.forEach(
-      preferred => {
+
+    preferred.forEach(
+      preferredName => {
 
         if (
           name.includes(
-            preferred
+            preferredName
           )
         ) {
-          score += 80;
+          score += 350;
         }
 
       }
     );
 
 
-    // Cloud voices are often higher quality.
-    if (
-      voice.localService === false
-    ) {
-      score += 20;
-    }
+    // De-prioritize common older robotic voices.
+    const lowerPriority = [
+      "david",
+      "mark",
+      "george"
+    ];
+
+
+    lowerPriority.forEach(
+      oldVoice => {
+
+        if (
+          name.includes(
+            oldVoice
+          )
+        ) {
+          score -= 300;
+        }
+
+      }
+    );
 
 
     return score;
+  }
+
+
+  function cleanVoiceName(voice) {
+
+    let name =
+      voice.name;
+
+
+    name = name
+      .replace(
+        /Microsoft /gi,
+        ""
+      )
+      .replace(
+        / Online \(Natural\)/gi,
+        " · Natural"
+      )
+      .replace(
+        / Online/gi,
+        ""
+      )
+      .replace(
+        / Desktop/gi,
+        ""
+      );
+
+
+    return `${name} · ${voice.lang}`;
   }
 
 
@@ -300,6 +361,7 @@
 
     const voices =
       synth.getVoices();
+
 
     if (!voices.length) {
       return;
@@ -321,35 +383,33 @@
         );
 
 
-    const best =
-      availableVoices
-        .filter(
-          voice =>
-            voiceScore(voice) > 0
-        )
-        .slice(0, 3);
-
-
     const select =
       document.querySelector(
         "#voiceSelect"
       );
+
 
     if (!select) {
       return;
     }
 
 
-    select.innerHTML = `
+    /*
+      Keep the menu short.
 
-      <option value="auto">
-        Best natural voice
-      </option>
+      We show the six highest-ranked English voices
+      actually available on this computer/browser.
+    */
 
-    `;
+    const candidates =
+      availableVoices
+        .slice(0, 6);
 
 
-    best.forEach(
+    select.innerHTML = "";
+
+
+    candidates.forEach(
       voice => {
 
         const option =
@@ -357,13 +417,16 @@
             "option"
           );
 
+
         option.value =
           voice.name;
 
+
         option.textContent =
           cleanVoiceName(
-            voice.name
+            voice
           );
+
 
         select.appendChild(
           option
@@ -373,81 +436,68 @@
     );
 
 
-    const saved =
+    const savedVoice =
       localStorage.getItem(
         VOICE_KEY
       );
 
 
-    if (
-      saved &&
-      [...select.options]
-        .some(
-          option =>
-            option.value === saved
-        )
-    ) {
-      select.value =
-        saved;
-    }
-
-  }
-
-
-  function cleanVoiceName(name) {
-
-    return name
-      .replace(
-        /Microsoft /gi,
-        ""
-      )
-      .replace(
-        / Online \(Natural\)/gi,
-        ""
-      )
-      .replace(
-        / Online/gi,
-        ""
-      )
-      .replace(
-        / Desktop/gi,
-        ""
+    const savedExists =
+      candidates.some(
+        voice =>
+          voice.name === savedVoice
       );
+
+
+    if (savedExists) {
+
+      select.value =
+        savedVoice;
+
+    }
+    else if (
+      candidates.length
+    ) {
+
+      select.value =
+        candidates[0].name;
+
+
+      localStorage.setItem(
+        VOICE_KEY,
+        candidates[0].name
+      );
+
+    }
 
   }
 
 
   function selectedVoice() {
 
-    const select =
-      document.querySelector(
-        "#voiceSelect"
+    const selectedName =
+      document
+        .querySelector(
+          "#voiceSelect"
+        )
+        ?.value;
+
+
+    if (!selectedName) {
+
+      return (
+        availableVoices[0] ||
+        null
       );
-
-    const selection =
-      select
-        ? select.value
-        : "auto";
-
-
-    if (
-      selection !== "auto"
-    ) {
-
-      const exact =
-        availableVoices.find(
-          voice =>
-            voice.name === selection
-        );
-
-      if (exact) {
-        return exact;
-      }
 
     }
 
 
     return (
+      availableVoices.find(
+        voice =>
+          voice.name === selectedName
+      ) ||
       availableVoices[0] ||
       null
     );
@@ -455,7 +505,54 @@
   }
 
 
-  // ============================================================
+  function previewSelectedVoice() {
+
+    synth.cancel();
+
+
+    const voice =
+      selectedVoice();
+
+
+    const preview =
+      new SpeechSynthesisUtterance(
+        "Hi. This is the voice I'll use throughout Neon Grove. " +
+        "You can listen to any API lesson section as many times as you need."
+      );
+
+
+    if (voice) {
+
+      preview.voice =
+        voice;
+
+      preview.lang =
+        voice.lang || "en-US";
+
+    }
+
+
+    const rate =
+      Number(
+        document
+          .querySelector(
+            "#speechRate"
+          )
+          ?.value || 1
+      );
+
+
+    preview.rate =
+      rate;
+
+
+    synth.speak(
+      preview
+    );
+
+  }
+
+// ============================================================
   // SPEECH TEXT CLEANUP
   // ============================================================
 
