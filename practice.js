@@ -1354,31 +1354,25 @@
     if (!lesson) {
       return;
     }
+    /*
+      The lesson renderer creates:
 
+      <div class="challenge">
+        <strong>Challenge</strong>
+        <span>...</span>
+      </div>
 
-    const headings =
-      [...lesson.querySelectorAll(
-        "h2, h3, h4"
-      )];
-
-
-    const heading =
-      headings.find(
-        element =>
-          element.textContent
-            .trim()
-            .toLowerCase() ===
-          "challenge"
+      So mount directly to the .challenge element.
+    */
+    const challenge =
+      lesson.querySelector(
+        ".challenge"
       );
 
 
-    if (!heading) {
+    if (!challenge) {
       return;
     }
-
-
-    const challenge =
-      heading.parentElement;
 
 
     if (
