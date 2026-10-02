@@ -2439,3 +2439,11 @@ code {
   background:
     rgba(76,255,154,.11);
 }
+/* Narration voice is intentionally hardcoded.
+   Only speed remains user-adjustable. */
+
+#voiceSelect,
+#previewVoice,
+.narration-preview {
+  display: none !important;
+}

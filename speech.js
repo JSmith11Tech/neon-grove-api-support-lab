@@ -5,17 +5,68 @@
   const synth = window.speechSynthesis;
 
   if (!synth) {
-    console.warn("Browser speech synthesis is unavailable.");
+    console.warn("Speech synthesis is not available in this browser.");
     return;
   }
 
+  const VOICE_NAME = "Google US English";
+  const RATE_KEY = "neon-grove-speech-rate";
+
   let activeCard = null;
   let activeButton = null;
-  let availableVoices = [];
-  let observerBusy = false;
+  let voices = [];
 
-  const VOICE_KEY = "neon-grove-voice";
-  const RATE_KEY = "neon-grove-speech-rate";
+
+  // ============================================================
+  // VOICE
+  // ============================================================
+
+  function refreshVoices() {
+
+    voices = synth.getVoices();
+
+  }
+
+
+  function getNarrationVoice() {
+
+    // Exact hardcoded voice first.
+    const exact =
+      voices.find(
+        voice =>
+          voice.name === VOICE_NAME
+      );
+
+    if (exact) {
+      return exact;
+    }
+
+
+    // Safe fallback: another Google US voice.
+    const googleUs =
+      voices.find(
+        voice =>
+          voice.lang === "en-US" &&
+          voice.name
+            .toLowerCase()
+            .includes("google")
+      );
+
+    if (googleUs) {
+      return googleUs;
+    }
+
+
+    // Final fallback: any US English voice.
+    return (
+      voices.find(
+        voice =>
+          voice.lang === "en-US"
+      ) ||
+      null
+    );
+
+  }
 
 
   // ============================================================
@@ -32,6 +83,7 @@
       return;
     }
 
+
     const content =
       document.querySelector(
         ".content"
@@ -40,6 +92,7 @@
     if (!content) {
       return;
     }
+
 
     const toolbar =
       document.createElement(
@@ -51,6 +104,7 @@
 
     toolbar.className =
       "narration-toolbar";
+
 
     toolbar.innerHTML = `
 
@@ -67,7 +121,7 @@
           </strong>
 
           <span>
-            Play any section individually
+            Google US English · play any section individually
           </span>
 
         </div>
@@ -76,25 +130,6 @@
 
 
       <div class="narration-controls">
-
-        <label>
-
-          <span>
-            Voice
-          </span>
-
-          <select
-            id="voiceSelect"
-            aria-label="Narration voice">
-
-            <option value="auto">
-              Best natural voice
-            </option>
-
-          </select>
-
-        </label>
-
 
         <label>
 
@@ -118,6 +153,10 @@
               1.2×
             </option>
 
+            <option value="1.3">
+              1.3×
+            </option>
+
           </select>
 
         </label>
@@ -134,7 +173,9 @@
         </button>
 
       </div>
+
     `;
+
 
     content.insertBefore(
       toolbar,
@@ -142,71 +183,48 @@
     );
 
 
+    const rate =
+      document.querySelector(
+        "#speechRate"
+      );
+
+
     const savedRate =
       localStorage.getItem(
         RATE_KEY
       );
 
-    if (savedRate) {
 
-      const rate =
-        document.querySelector(
-          "#speechRate"
-        );
-
-      if (
-        [...rate.options]
-          .some(
-            option =>
-              option.value === savedRate
-          )
-      ) {
-        rate.value =
-          savedRate;
-      }
-
+    if (
+      savedRate &&
+      [...rate.options]
+        .some(
+          option =>
+            option.value === savedRate
+        )
+    ) {
+      rate.value =
+        savedRate;
     }
 
 
-    document
-      .querySelector("#speechRate")
-      .addEventListener(
-        "change",
-        event => {
+    rate.addEventListener(
+      "change",
+      () => {
 
-          localStorage.setItem(
-            RATE_KEY,
-            event.target.value
-          );
+        localStorage.setItem(
+          RATE_KEY,
+          rate.value
+        );
 
-        }
-      );
+      }
+    );
 
 
     document
-      .querySelector("#voiceSelect")
-      .addEventListener(
-        "change",
-        event => {
-
-          localStorage.setItem(
-            VOICE_KEY,
-            event.target.value
-          );
-
-        }
-      );
-
-
-
-    document
-      .querySelector("#previewVoice")
-      .addEventListener(
-        "click",
-        previewSelectedVoice
-      );
-    document
-      .querySelector("#stopNarration")
+      .querySelector(
+        "#stopNarration"
+      )
       .addEventListener(
         "click",
         stopNarration
@@ -216,344 +234,7 @@
 
 
   // ============================================================
-  // NATURAL VOICE SELECTION
-  // ============================================================
-
-  function voiceScore(voice) {
-
-    const name =
-      voice.name.toLowerCase();
-
-    const lang =
-      voice.lang.toLowerCase();
-
-
-    if (
-      !lang.startsWith("en")
-    ) {
-      return -10000;
-    }
-
-
-    let score = 0;
-
-
-    // Strong preference for US English.
-    if (
-      lang === "en-us"
-    ) {
-      score += 500;
-    }
-    else {
-      score += 100;
-    }
-
-
-    // Natural / neural engines first.
-    if (
-      name.includes("natural")
-    ) {
-      score += 1000;
-    }
-
-
-    if (
-      name.includes("neural")
-    ) {
-      score += 1000;
-    }
-
-
-    // Google voices generally sound better than
-    // older system TTS voices when available.
-    if (
-      name.includes("google")
-    ) {
-      score += 800;
-    }
-
-
-    // Favor common modern female US voices.
-    const preferred = [
-      "aria",
-      "ava",
-      "jenny",
-      "emma",
-      "michelle",
-      "samantha",
-      "zira",
-      "female"
-    ];
-
-
-    preferred.forEach(
-      preferredName => {
-
-        if (
-          name.includes(
-            preferredName
-          )
-        ) {
-          score += 350;
-        }
-
-      }
-    );
-
-
-    // De-prioritize common older robotic voices.
-    const lowerPriority = [
-      "david",
-      "mark",
-      "george"
-    ];
-
-
-    lowerPriority.forEach(
-      oldVoice => {
-
-        if (
-          name.includes(
-            oldVoice
-          )
-        ) {
-          score -= 300;
-        }
-
-      }
-    );
-
-
-    return score;
-  }
-
-
-  function cleanVoiceName(voice) {
-
-    let name =
-      voice.name;
-
-
-    name = name
-      .replace(
-        /Microsoft /gi,
-        ""
-      )
-      .replace(
-        / Online \(Natural\)/gi,
-        " · Natural"
-      )
-      .replace(
-        / Online/gi,
-        ""
-      )
-      .replace(
-        / Desktop/gi,
-        ""
-      );
-
-
-    return `${name} · ${voice.lang}`;
-  }
-
-
-  function refreshVoices() {
-
-    const voices =
-      synth.getVoices();
-
-
-    if (!voices.length) {
-      return;
-    }
-
-
-    availableVoices =
-      voices
-        .filter(
-          voice =>
-            voice.lang
-              .toLowerCase()
-              .startsWith("en")
-        )
-        .sort(
-          (a, b) =>
-            voiceScore(b) -
-            voiceScore(a)
-        );
-
-
-    const select =
-      document.querySelector(
-        "#voiceSelect"
-      );
-
-
-    if (!select) {
-      return;
-    }
-
-
-    /*
-      Keep the menu short.
-
-      We show the six highest-ranked English voices
-      actually available on this computer/browser.
-    */
-
-    const candidates =
-      availableVoices
-        .slice(0, 6);
-
-
-    select.innerHTML = "";
-
-
-    candidates.forEach(
-      voice => {
-
-        const option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          voice.name;
-
-
-        option.textContent =
-          cleanVoiceName(
-            voice
-          );
-
-
-        select.appendChild(
-          option
-        );
-
-      }
-    );
-
-
-    const savedVoice =
-      localStorage.getItem(
-        VOICE_KEY
-      );
-
-
-    const savedExists =
-      candidates.some(
-        voice =>
-          voice.name === savedVoice
-      );
-
-
-    if (savedExists) {
-
-      select.value =
-        savedVoice;
-
-    }
-    else if (
-      candidates.length
-    ) {
-
-      select.value =
-        candidates[0].name;
-
-
-      localStorage.setItem(
-        VOICE_KEY,
-        candidates[0].name
-      );
-
-    }
-
-  }
-
-
-  function selectedVoice() {
-
-    const selectedName =
-      document
-        .querySelector(
-          "#voiceSelect"
-        )
-        ?.value;
-
-
-    if (!selectedName) {
-
-      return (
-        availableVoices[0] ||
-        null
-      );
-
-    }
-
-
-    return (
-      availableVoices.find(
-        voice =>
-          voice.name === selectedName
-      ) ||
-      availableVoices[0] ||
-      null
-    );
-
-  }
-
-
-  function previewSelectedVoice() {
-
-    synth.cancel();
-
-
-    const voice =
-      selectedVoice();
-
-
-    const preview =
-      new SpeechSynthesisUtterance(
-        "Hi. This is the voice I'll use throughout Neon Grove. " +
-        "You can listen to any API lesson section as many times as you need."
-      );
-
-
-    if (voice) {
-
-      preview.voice =
-        voice;
-
-      preview.lang =
-        voice.lang || "en-US";
-
-    }
-
-
-    const rate =
-      Number(
-        document
-          .querySelector(
-            "#speechRate"
-          )
-          ?.value || 1
-      );
-
-
-    preview.rate =
-      rate;
-
-
-    synth.speak(
-      preview
-    );
-
-  }
-
-// ============================================================
-  // SPEECH TEXT CLEANUP
+  // TEXT CLEANUP
   // ============================================================
 
   function spokenText(card) {
@@ -566,9 +247,9 @@
       .querySelectorAll(
         [
           ".section-read-btn",
-          "button",
           ".choice-grid",
-          ".action-row"
+          ".action-row",
+          "button"
         ].join(",")
       )
       .forEach(
@@ -586,35 +267,45 @@
         .trim();
 
 
-    // Make common technical abbreviations sound intentional.
+    /*
+      Make technical terms easier for TTS.
+    */
+
     text = text
-      .replace(
-        /\bAPI\b/g,
-        "A P I"
-      )
       .replace(
         /\bAPIs\b/g,
         "A P I's"
       )
       .replace(
-        /\bHTTP\b/g,
-        "H T T P"
+        /\bAPI\b/g,
+        "A P I"
       )
       .replace(
         /\bHTTPS\b/g,
         "H T T P S"
       )
       .replace(
-        /\bURL\b/g,
-        "U R L"
+        /\bHTTP\b/g,
+        "H T T P"
       )
       .replace(
         /\bURLs\b/g,
         "U R L's"
+      )
+      .replace(
+        /\bURL\b/g,
+        "U R L"
+      )
+      .replace(
+        /\bJSON\b/g,
+        "J S O N"
       );
 
 
-    // Make URLs less awful when read aloud.
+    /*
+      Stop the voice from mangling URLs.
+    */
+
     text = text.replace(
       /https?:\/\/[^\s]+/gi,
       url => {
@@ -650,12 +341,16 @@
   // PLAYBACK
   // ============================================================
 
-  function speakCard(
+  function speakSection(
     card,
     button
   ) {
 
-    // Clicking the active card again stops it.
+    /*
+      Clicking the same active section
+      acts like Stop.
+    */
+
     if (
       activeCard === card &&
       synth.speaking
@@ -663,6 +358,7 @@
 
       stopNarration();
       return;
+
     }
 
 
@@ -685,7 +381,7 @@
 
 
     const voice =
-      selectedVoice();
+      getNarrationVoice();
 
 
     if (voice) {
@@ -735,21 +431,24 @@
         "is-speaking"
       );
 
+
       button.classList.add(
         "is-speaking"
       );
 
-      button.innerHTML =
+
+      button.textContent =
         "■ Stop";
 
 
-      const stop =
+      const globalStop =
         document.querySelector(
           "#stopNarration"
         );
 
-      if (stop) {
-        stop.disabled =
+
+      if (globalStop) {
+        globalStop.disabled =
           false;
       }
 
@@ -797,7 +496,8 @@
         "is-speaking"
       );
 
-      activeButton.innerHTML =
+
+      activeButton.textContent =
         "▶ Read section";
 
     }
@@ -810,32 +510,27 @@
       null;
 
 
-    const stop =
+    const globalStop =
       document.querySelector(
         "#stopNarration"
       );
 
-    if (stop) {
-      stop.disabled =
+
+    if (globalStop) {
+
+      globalStop.disabled =
         true;
+
     }
 
   }
 
 
   // ============================================================
-  // INDIVIDUAL SECTION BUTTONS
+  // SECTION BUTTONS
   // ============================================================
 
   function addReadButtons() {
-
-    if (observerBusy) {
-      return;
-    }
-
-    observerBusy =
-      true;
-
 
     const cards =
       document.querySelectorAll(
@@ -864,14 +559,18 @@
             "button"
           );
 
+
         button.type =
           "button";
+
 
         button.className =
           "section-read-btn";
 
-        button.innerHTML =
+
+        button.textContent =
           "▶ Read section";
+
 
         button.setAttribute(
           "aria-label",
@@ -885,7 +584,7 @@
 
             event.stopPropagation();
 
-            speakCard(
+            speakSection(
               card,
               button
             );
@@ -901,10 +600,6 @@
       }
     );
 
-
-    observerBusy =
-      false;
-
   }
 
 
@@ -912,12 +607,13 @@
   // WATCH MODULE CHANGES
   // ============================================================
 
-  function watchLessons() {
+  function watchLessonChanges() {
 
     const lesson =
       document.querySelector(
         "#lesson"
       );
+
 
     if (!lesson) {
       return;
@@ -928,21 +624,25 @@
       new MutationObserver(
         () => {
 
-          if (observerBusy) {
-            return;
-          }
-
           stopNarration();
+
           addReadButtons();
 
         }
       );
 
 
+    /*
+      Watch direct module rerenders only.
+      Adding buttons inside cards will not
+      trigger an endless loop.
+    */
+
     observer.observe(
       lesson,
       {
-        childList: true
+        childList: true,
+        subtree: false
       }
     );
 
@@ -959,31 +659,35 @@
 
   addReadButtons();
 
-  watchLessons();
+  watchLessonChanges();
 
 
-  if (
-    "onvoiceschanged" in synth
-  ) {
-
-    synth.addEventListener(
-      "voiceschanged",
-      refreshVoices
-    );
-
-  }
+  synth.addEventListener?.(
+    "voiceschanged",
+    refreshVoices
+  );
 
 
-  // Stop narration when changing modules.
+  /*
+    Chrome sometimes loads voices slightly late.
+  */
+
+  setTimeout(
+    refreshVoices,
+    250
+  );
+
+
   document
-    .querySelector("#moduleNav")
+    .querySelector(
+      "#moduleNav"
+    )
     ?.addEventListener(
       "click",
       stopNarration
     );
 
 
-  // Stop narration if leaving/reloading.
   window.addEventListener(
     "beforeunload",
     () => synth.cancel()
