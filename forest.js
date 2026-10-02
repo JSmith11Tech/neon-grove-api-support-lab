@@ -465,12 +465,44 @@ function handsOnXpEarned() {
 
 }
 
+function moduleQuizXpEarned() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        "neon-grove-module-quiz-state"
+      );
+
+    if (!raw) {
+      return 0;
+    }
+
+    const quizState =
+      JSON.parse(raw);
+
+    return (
+      Object.values(
+        quizState.passed || {}
+      )
+        .filter(Boolean)
+        .length * 50
+    );
+
+  }
+  catch {
+    return 0;
+  }
+
+}
+
 function lifetimeXp() {
 
   return (
     moduleXpEarned() +
     quizXpEarned() +
-    handsOnXpEarned()
+    handsOnXpEarned() +
+    moduleQuizXpEarned()
   );
 
 }

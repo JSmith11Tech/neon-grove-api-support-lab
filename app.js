@@ -222,11 +222,43 @@ function handsOnXpEarned() {
   }
 }
 
+function moduleQuizXpEarned() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        "neon-grove-module-quiz-state"
+      );
+
+    if (!raw) {
+      return 0;
+    }
+
+    const quizState =
+      JSON.parse(raw);
+
+    return (
+      Object.values(
+        quizState.passed || {}
+      )
+        .filter(Boolean)
+        .length * 50
+    );
+
+  }
+  catch {
+    return 0;
+  }
+
+}
+
 function lifetimeXp() {
   return (
     moduleXpEarned() +
     quizXpEarned() +
-    handsOnXpEarned()
+    handsOnXpEarned() +
+    moduleQuizXpEarned()
   );
 }
 
@@ -933,6 +965,21 @@ window.addEventListener(
   }
 );
 
+window.addEventListener(
+  "neon-grove-module-quiz-xp-changed",
+  () => {
+
+    updateStats();
+
+    if (
+      typeof updateForest === "function"
+    ) {
+      updateForest();
+    }
+
+  }
+);
+
 $("#resetBtn").onclick = () => {
 
   if (
@@ -942,6 +989,10 @@ $("#resetBtn").onclick = () => {
   ) {
     localStorage.removeItem(
       stateKey
+    );
+
+    localStorage.removeItem(
+      "neon-grove-module-quiz-state"
     );
 
     localStorage.removeItem(
