@@ -115,10 +115,39 @@ function quizXpEarned() {
   );
 }
 
+function handsOnXpEarned() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        "neon-grove-practice-state"
+      );
+
+    if (!raw) {
+      return 0;
+    }
+
+    const practice =
+      JSON.parse(raw);
+
+    return (
+      Object.values(
+        practice.completed || {}
+      )
+        .filter(Boolean)
+        .length * 50
+    );
+
+  }
+  catch {
+    return 0;
+  }
+}
+
 function lifetimeXp() {
   return (
-    moduleXpEarned() +
-    quizXpEarned()
+    moduleXpEarned() +`r`n    quizXpEarned() +`r`n    handsOnXpEarned()
   );
 }
 
@@ -799,6 +828,21 @@ $("#plantTreeBtn").onclick = () => {
   updateStats();
 };
 
+window.addEventListener(
+  "neon-grove-practice-xp-changed",
+  () => {
+
+    updateStats();
+
+    if (
+      typeof renderForest === "function"
+    ) {
+      renderForest();
+    }
+
+  }
+);
+
 $("#resetBtn").onclick = () => {
 
   if (
@@ -808,6 +852,10 @@ $("#resetBtn").onclick = () => {
   ) {
     localStorage.removeItem(
       stateKey
+    );
+
+    localStorage.removeItem(
+      "neon-grove-practice-state"
     );
 
     localStorage.removeItem(
