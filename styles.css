@@ -2969,3 +2969,71 @@ code {
   }
 
 }
+/* =========================================================
+   POSTMAN HANDS-ON MISSION STEPS
+   ========================================================= */
+
+.practice-postman-callout {
+  margin-bottom: 1rem;
+  padding: .8rem .9rem;
+
+  border-left: 3px solid #72ffb5;
+
+  color: #cceade;
+
+  background:
+    rgba(77, 225, 148, .07);
+
+  line-height: 1.55;
+}
+
+
+.practice-steps {
+  display: grid;
+  gap: .55rem;
+
+  margin-bottom: 1rem;
+}
+
+
+.practice-step {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+
+  padding: .6rem .7rem;
+
+  border:
+    1px solid
+    rgba(78, 143, 111, .24);
+
+  border-radius: 9px;
+
+  background:
+    rgba(4, 21, 15, .46);
+
+  color: #c4ddd2;
+
+  line-height: 1.45;
+}
+
+
+.practice-step-number {
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 24px;
+
+  width: 24px;
+  height: 24px;
+
+  border:
+    1px solid #397957;
+
+  border-radius: 50%;
+
+  color: #a6ffd0;
+
+  font-size: .7rem;
+  font-weight: 900;
+}

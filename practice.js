@@ -8,6 +8,25 @@
   const MISSION_XP = 50;
 
 
+  const POSTMAN_MODULES = new Set([
+    "Postman Platform & Workspaces",
+    "Discover, Fork & Try APIs",
+    "API Mental Model",
+    "HTTP Methods",
+    "URLs & Parameters",
+    "Headers",
+    "Request Bodies & JSON",
+    "Responses & Status Codes",
+    "Authentication & Authorization",
+    "Variables & Environments",
+    "Collections & Workflows",
+    "Postman Tests",
+    "API Troubleshooting",
+    "Support Ticket Simulations",
+    "Capstone Investigation"
+  ]);
+
+
   function freshState() {
 
     return {
@@ -60,6 +79,31 @@
   }
 
 
+  function currentModuleTitle() {
+
+    const lesson =
+      document.querySelector(
+        "#lesson"
+      );
+
+    if (!lesson) {
+      return "";
+    }
+
+
+    const heading =
+      lesson.querySelector(
+        "h1, h2"
+      );
+
+
+    return heading
+      ? heading.textContent.trim()
+      : "";
+
+  }
+
+
   function hashString(text) {
 
     let hash = 0;
@@ -85,9 +129,12 @@
   }
 
 
-  function missionKey(container) {
+  function missionKey(
+    moduleTitle,
+    container
+  ) {
 
-    const text =
+    const challengeText =
       container.textContent
         .replace(
           /\s+/g,
@@ -99,8 +146,35 @@
         )
         .trim();
 
-    return "mission-" +
-      hashString(text);
+
+    return (
+      "mission-" +
+      hashString(
+        `${moduleTitle}|${challengeText}`
+      )
+    );
+
+  }
+
+
+  function createStep(
+    number,
+    text
+  ) {
+
+    return `
+      <div class="practice-step">
+
+        <span class="practice-step-number">
+          ${number}
+        </span>
+
+        <span>
+          ${text}
+        </span>
+
+      </div>
+    `;
 
   }
 
@@ -155,8 +229,19 @@
       "true";
 
 
+    const moduleTitle =
+      currentModuleTitle();
+
+
+    const usesPostman =
+      POSTMAN_MODULES.has(
+        moduleTitle
+      );
+
+
     const key =
       missionKey(
+        moduleTitle,
         challenge
       );
 
@@ -175,6 +260,58 @@
       "practice-workspace";
 
 
+    const missionSteps =
+      usesPostman
+        ? `
+          ${createStep(
+            1,
+            "<strong>Open Postman.</strong>"
+          )}
+
+          ${createStep(
+            2,
+            "Open your <strong>Neon Grove API Practice</strong> workspace and collection."
+          )}
+
+          ${createStep(
+            3,
+            "Complete the challenge shown directly above this mission card."
+          )}
+
+          ${createStep(
+            4,
+            "Inspect what was actually sent and what came back."
+          )}
+
+          ${createStep(
+            5,
+            "Return here and record evidence from your result."
+          )}
+        `
+        : `
+          ${createStep(
+            1,
+            "Complete the challenge shown above."
+          )}
+
+          ${createStep(
+            2,
+            "Write a short explanation showing what you concluded."
+          )}
+
+          ${createStep(
+            3,
+            "Submit the evidence to complete the mission."
+          )}
+        `;
+
+
+    const placeholder =
+      usesPostman
+        ? "Example: Sent GET /get in Postman. Response was 200 OK. I confirmed the request method, URL, query parameters, headers, and JSON response."
+        : "Write what you did and what you concluded.";
+
+
     workspace.innerHTML = `
 
       <div class="practice-workspace-heading">
@@ -182,11 +319,23 @@
         <div>
 
           <p class="practice-eyebrow">
-            🧪 PRACTICE WORKSPACE · +${MISSION_XP} XP
+
+            ${
+              usesPostman
+                ? "🧪 OPEN POSTMAN · HANDS-ON MISSION"
+                : "🧪 HANDS-ON MISSION"
+            }
+
+            · +${MISSION_XP} XP
+
           </p>
 
           <h4>
-            Record your hands-on evidence
+            ${
+              usesPostman
+                ? "Do the work in Postman"
+                : "Apply what you learned"
+            }
           </h4>
 
         </div>
@@ -202,25 +351,38 @@
       </div>
 
 
-      <p class="practice-instructions">
+      ${
+        usesPostman
+          ? `
+            <div class="practice-postman-callout">
 
-        Do the challenge in
-        <strong>Postman</strong>,
-        then record what you actually did or observed.
+              <strong>
+                Reading stops here.
+              </strong>
 
-        A short answer is enough.
+              This mission is meant to be completed in
+              <strong>real Postman</strong>,
+              not simulated inside Neon Grove.
 
-      </p>
+            </div>
+          `
+          : ""
+      }
+
+
+      <div class="practice-steps">
+        ${missionSteps}
+      </div>
 
 
       <label class="practice-label">
 
-        What did you do / find?
+        Evidence from your work
 
         <textarea
           class="practice-evidence"
-          rows="4"
-          placeholder="Example: GET retrieved the customer record. POST created a new resource. PATCH changed one field. DELETE removed the resource."
+          rows="5"
+          placeholder="${placeholder}"
         ></textarea>
 
       </label>
@@ -229,7 +391,7 @@
       <div class="practice-footer">
 
         <span class="practice-help">
-          Minimum 12 characters of evidence
+          Record at least one concrete result from the mission.
         </span>
 
         <button
@@ -322,11 +484,13 @@
 
 
         if (
-          evidence.length < 12
+          evidence.length < 20
         ) {
 
           feedback.textContent =
-            "Add a little evidence from what you did in Postman first.";
+            usesPostman
+              ? "Record a concrete result from Postman first — method, status code, response value, header, parameter, or another observation."
+              : "Add a little more evidence from the mission first.";
 
           textarea.focus();
 
@@ -386,6 +550,23 @@
   }
 
 
+  function resetEnhancement() {
+
+    document
+      .querySelectorAll(
+        "[data-practice-ready]"
+      )
+      .forEach(
+        element => {
+
+          delete element.dataset.practiceReady;
+
+        }
+      );
+
+  }
+
+
   function watchLessons() {
 
     const lesson =
@@ -399,9 +580,29 @@
     }
 
 
+    let lastTitle =
+      currentModuleTitle();
+
+
     const observer =
       new MutationObserver(
         () => {
+
+          const title =
+            currentModuleTitle();
+
+
+          if (
+            title !== lastTitle
+          ) {
+
+            lastTitle =
+              title;
+
+            resetEnhancement();
+
+          }
+
 
           requestAnimationFrame(
             enhanceChallenge
