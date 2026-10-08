@@ -42,7 +42,15 @@ const species = [
     name: "Quantum Sakura",
     level: 5,
     unlockXp: 1900,
-    description: "The rarest species in the current Neon Grove ecosystem."
+    description: "A rare crystalline flowering tree that marks a highly developed grove."
+  },
+
+  {
+    id: "titan-sequoia",
+    name: "Titan Sequoia",
+    level: 6,
+    unlockXp: 2500,
+    description: "The monumental late-game landmark of Neon Grove: an ancient cyber-sequoia towering above the entire ecosystem."
   }
 
 ];
@@ -105,7 +113,7 @@ const fauna = [
   {
     id: "circuit-finch",
     name: "Circuit Finch",
-    icon: "🐦",
+    icon: "",
     minXp: 600,
     minTrees: 6,
     minFlora: 2,
@@ -474,24 +482,33 @@ function moduleQuizXpEarned() {
         "neon-grove-module-quiz-state"
       );
 
+
     if (!raw) {
       return 0;
     }
 
-    const quizState =
+
+    const parsed =
       JSON.parse(raw);
 
+
+    const passed =
+      parsed.passed ||
+      parsed.completed ||
+      {};
+
+
     return (
-      Object.values(
-        quizState.passed || {}
-      )
+      Object.values(passed)
         .filter(Boolean)
         .length * 50
     );
 
   }
   catch {
+
     return 0;
+
   }
 
 }
@@ -857,6 +874,489 @@ function renderGrowthStages() {
 
 }
 
+const NEON_GROVE_LANDSCAPE_SPOTS = [
+
+  /*
+    MAIN GROVE
+    Trees grow in compact communities rather than
+    spreading evenly across the whole landscape.
+  */
+
+  /* left / central grove */
+  { x: 13, y: 29, s: 1.16 },
+  { x: 20, y: 38, s: .91 },
+  { x: 27, y: 27, s: 1.10 },
+  { x: 34, y: 39, s: .84 },
+  { x: 40, y: 29, s: 1.01 },
+  { x: 24, y: 20, s: 1.18 },
+  { x: 36, y: 19, s: 1.14 },
+
+  /* secondary grove */
+  { x: 52, y: 34, s: .94 },
+  { x: 58, y: 25, s: 1.10 },
+  { x: 65, y: 36, s: .86 },
+  { x: 70, y: 25, s: 1.13 },
+  { x: 76, y: 33, s: .91 },
+  { x: 62, y: 17, s: 1.21 },
+  { x: 73, y: 17, s: 1.18 },
+
+  /* natural outer edge */
+  { x: 9,  y: 19, s: .97 },
+  { x: 45, y: 19, s: 1.05 },
+  { x: 82, y: 22, s: 1.02 },
+  { x: 18, y: 46, s: .76 },
+  { x: 48, y: 43, s: .79 },
+  { x: 79, y: 42, s: .77 }
+
+];
+
+const NEON_GROVE_POND_ZONE = {
+
+  left: 62,
+  right: 97,
+
+  bottom: 2,
+  top: 28
+
+};
+
+
+const NEON_GROVE_LAND_SAFE_SPOTS = [
+
+  [10, 11],
+  [22, 10],
+  [34, 12],
+  [46, 10],
+  [57, 12],
+
+  [18, 31],
+  [32, 34],
+  [47, 31],
+  [58, 34],
+
+  [71, 32],
+  [82, 34],
+  [92, 32]
+
+];
+
+
+function neonLandscapePointInPond(
+  point
+) {
+
+  if (!point) {
+    return false;
+  }
+
+
+  return (
+    point.x >=
+      NEON_GROVE_POND_ZONE.left &&
+
+    point.x <=
+      NEON_GROVE_POND_ZONE.right &&
+
+    point.y >=
+      NEON_GROVE_POND_ZONE.bottom &&
+
+    point.y <=
+      NEON_GROVE_POND_ZONE.top
+  );
+
+}
+
+
+function neonLandscapeProtectLandPoint(
+  point,
+  seed
+) {
+
+  if (
+    !neonLandscapePointInPond(
+      point
+    )
+  ) {
+
+    return point;
+
+  }
+
+
+  const safe =
+    NEON_GROVE_LAND_SAFE_SPOTS[
+      Math.abs(seed) %
+      NEON_GROVE_LAND_SAFE_SPOTS.length
+    ];
+
+
+  return Object.assign(
+    {},
+    point,
+    {
+      x: safe[0],
+      y: safe[1]
+    }
+  );
+
+}
+
+
+function neonLandscapeAnimalSeed(
+  animalId,
+  index
+) {
+
+  let value = 0;
+
+  const text =
+    String(
+      animalId ||
+      ""
+    );
+
+
+  for (
+    let i = 0;
+    i < text.length;
+    i++
+  ) {
+
+    value +=
+      text.charCodeAt(i) *
+      (i + 1);
+
+  }
+
+
+  return (
+    value +
+    index * 17
+  );
+
+}
+
+
+function neonLandscapeTreeSpot(
+  tree,
+  index
+) {
+
+  /*
+    TITAN LANDMARK PLACEMENT
+
+    Titan Sequoias remain landmark trees, but no
+    Titan is allowed to grow out of the pond.
+  */
+
+  if (
+    tree.species ===
+    "titan-sequoia"
+  ) {
+
+    const titanIndex =
+      state.trees
+        .slice(
+          0,
+          index
+        )
+        .filter(
+          item =>
+            item.species ===
+            "titan-sequoia"
+        )
+        .length;
+
+
+    const titanSpots = [
+
+      {
+        x: 50,
+        y: 23,
+        scale: 1.72
+      },
+
+      {
+        x: 17,
+        y: 19,
+        scale: 1.55
+      },
+
+      {
+        x: 84,
+        y: 34,
+        scale: 1.55
+      }
+
+    ];
+
+
+    return (
+      titanSpots[
+        titanIndex %
+        titanSpots.length
+      ]
+    );
+
+  }
+
+
+  const base =
+    NEON_GROVE_LANDSCAPE_SPOTS[
+      index %
+      NEON_GROVE_LANDSCAPE_SPOTS.length
+    ];
+
+
+  const generation =
+    Math.floor(
+      index /
+      NEON_GROVE_LANDSCAPE_SPOTS.length
+    );
+
+
+  const point = {
+
+    x:
+      Math.min(
+        96,
+        base.x +
+        generation * 1.3
+      ),
+
+    y:
+      base.y,
+
+    scale:
+      Math.max(
+        .65,
+        base.s -
+        generation * .04
+      )
+
+  };
+
+
+  return neonLandscapeProtectLandPoint(
+    point,
+    index
+  );
+
+}
+
+
+function neonLandscapeFaunaSpot(
+  animalId,
+  index
+) {
+
+  const habitats = {
+
+    "lumen-firefly": [
+      [18, 61],
+      [31, 70],
+      [44, 58],
+      [57, 67],
+      [70, 62],
+      [83, 72],
+      [91, 58]
+    ],
+
+    "chrome-beetle": [
+      [11, 8],
+      [30, 10],
+      [48, 7],
+      [63, 11],
+      [57, 8]
+    ],
+
+    /*
+      Frogs belong beside the wetland,
+      not in the middle of the pond.
+    */
+    "circuit-frog": [
+      [60, 12],
+      [88, 30],
+      [63, 29]
+    ],
+
+    "circuit-finch": [
+      [20, 55],
+      [40, 64],
+      [68, 54],
+      [84, 60]
+    ],
+
+    /*
+      Koi are the only current fauna that
+      intentionally occupy the pond itself.
+    */
+    "neon-koi": [
+      [70, 8],
+      [76, 10],
+      [82, 8],
+      [87, 11],
+      [79, 6]
+    ],
+
+    "glasswing-moth": [
+      [29, 64],
+      [51, 72],
+      [76, 67]
+    ],
+
+    "echo-owl": [
+      [20, 34],
+      [58, 36],
+      [77, 33]
+    ],
+
+    "neon-hare": [
+      [25, 8],
+      [47, 10],
+      [91, 31]
+    ],
+
+    "phase-gecko": [
+      [36, 40],
+      [62, 43],
+      [80, 39]
+    ],
+
+    "aurora-fox": [
+      [37, 12],
+      [87, 32]
+    ],
+
+    "cyber-deer": [
+      [17, 14],
+      [48, 16],
+      [84, 34]
+    ],
+
+    "data-wisp": [
+      [28, 69],
+      [52, 66],
+      [74, 73],
+      [90, 63]
+    ],
+
+    "quantum-stag": [
+      [54, 15]
+    ]
+
+  };
+
+
+  const choices =
+    habitats[
+      animalId
+    ];
+
+
+  let point;
+
+
+  if (
+    choices &&
+    choices.length
+  ) {
+
+    const selected =
+      choices[
+        index %
+        choices.length
+      ];
+
+
+    point = {
+      x: selected[0],
+      y: selected[1]
+    };
+
+  }
+  else {
+
+    point = {
+
+      x:
+        10 +
+        (
+          (index * 17) %
+          80
+        ),
+
+      y:
+        9 +
+        (
+          (index * 11) %
+          25
+        )
+
+    };
+
+  }
+
+
+  /*
+    Aquatic exception.
+
+    Koi are allowed inside the protected water zone.
+    Everything else is automatically moved to land
+    if a future coordinate accidentally overlaps it.
+  */
+
+  if (
+    animalId ===
+    "neon-koi"
+  ) {
+
+    return point;
+
+  }
+
+
+  return neonLandscapeProtectLandPoint(
+    point,
+    neonLandscapeAnimalSeed(
+      animalId,
+      index
+    )
+  );
+
+}
+
+function neonLandscapeFaunaScale(
+  animalId
+) {
+
+  const scales = {
+
+    "lumen-firefly": .66,
+    "chrome-beetle": .76,
+    "circuit-frog": .94,
+    "circuit-finch": .91,
+    "neon-koi": .82,
+    "glasswing-moth": .84,
+    "echo-owl": 1,
+    "neon-hare": .97,
+    "phase-gecko": .84,
+    "aurora-fox": 1.1,
+    "cyber-deer": 1.18,
+    "data-wisp": .76,
+    "quantum-stag": 1.32
+
+  };
+
+
+  return (
+    scales[animalId] ||
+    1
+  );
+
+}
+
+
 function renderForest() {
 
   const forest =
@@ -865,17 +1365,90 @@ function renderForest() {
     );
 
 
-  const empty =
-    document.querySelector(
-      "#emptyGrove"
-    );
+  if (!forest) {
+    return;
+  }
+
+
+  forest.classList.add(
+    "grove-ecosystem"
+  );
+
+
+  forest.innerHTML = `
+
+    <div class="eco-mist eco-mist-a"></div>
+    <div class="eco-mist eco-mist-b"></div>
+
+    <div class="eco-hill eco-hill-back"></div>
+    <div class="eco-hill eco-hill-front"></div>
+
+    <div class="eco-path"></div>
+
+    <div class="eco-pond">
+
+      <span class="eco-ripple eco-ripple-a">
+      </span>
+
+      <span class="eco-ripple eco-ripple-b">
+      </span>
+
+    </div>
+
+    <div class="eco-fallen-log"></div>
+
+    <span class="eco-rock eco-rock-a"></span>
+    <span class="eco-rock eco-rock-b"></span>
+    <span class="eco-rock eco-rock-c"></span>
+
+    <span class="eco-grass eco-grass-a"></span>
+    <span class="eco-grass eco-grass-b"></span>
+    <span class="eco-grass eco-grass-c"></span>
+    <span class="eco-grass eco-grass-d"></span>
+
+  `;
 
 
   if (
-    state.trees.length > 0 &&
-    empty
+    state.trees.length === 0
   ) {
-    empty.remove();
+
+    const empty =
+      document.createElement(
+        "div"
+      );
+
+
+    empty.id =
+      "emptyGrove";
+
+    empty.className =
+      "grove-empty eco-empty";
+
+
+    empty.innerHTML = `
+
+      <span class="grove-seed">
+        ◉
+      </span>
+
+      <strong>
+        Your ecosystem is waiting.
+      </strong>
+
+      <span>
+        Plant your first tree to begin growing Neon Grove.
+      </span>
+
+    `;
+
+
+    forest.appendChild(
+      empty
+    );
+
+    return;
+
   }
 
 
@@ -887,8 +1460,50 @@ function renderForest() {
           "div"
         );
 
+
+      const growth =
+        treeGrowthStage(tree);
+
+
+      const point =
+        neonLandscapeTreeSpot(
+          tree,
+          index
+        );
+
+
       slot.className =
-        "grove-tree-slot";
+        "grove-tree-slot eco-tree";
+
+
+      slot.style.setProperty(
+        "--eco-x",
+        `${point.x}%`
+      );
+
+      slot.style.setProperty(
+        "--eco-y",
+        `${point.y}%`
+      );
+
+      slot.style.setProperty(
+        "--eco-scale",
+        String(
+          point.scale
+        )
+      );
+
+
+      slot.style.zIndex =
+        String(
+          Math.max(
+            10,
+            Math.round(
+              65 -
+              point.y
+            )
+          )
+        );
 
 
       const element =
@@ -896,11 +1511,10 @@ function renderForest() {
           "div"
         );
 
-      const growth =
-        treeGrowthStage(tree);
 
       element.className =
         `tree ${tree.species} growth-${growth.id}`;
+
 
       element.dataset.growthStage =
         growth.label;
@@ -920,25 +1534,13 @@ function renderForest() {
 
 
       element.title =
-        `${treeSpecies?.name || "Tree"} #${index + 1} · ${growth.label} · ${growth.gained} XP since planting`;
-
-
-      const label =
-        document.createElement(
-          "span"
-        );
-
-      label.textContent =
-        `${index + 1}`;
+        `${treeSpecies?.name || "Tree"} · ${growth.label} · ${growth.gained} XP since planting`;
 
 
       slot.appendChild(
         element
       );
 
-      slot.appendChild(
-        label
-      );
 
       forest.appendChild(
         slot
@@ -948,56 +1550,194 @@ function renderForest() {
   );
 
 
-  fauna.forEach(animal => {
+  fauna.forEach(
+    animal => {
 
-    const population =
-      faunaPopulation(animal);
-
-
-    for (
-      let index = 0;
-      index < population;
-      index++
-    ) {
-
-      const slot =
-        document.createElement(
-          "div"
+      const population =
+        faunaPopulation(
+          animal
         );
 
-      slot.className =
-        `fauna-slot fauna-${animal.id}`;
+
+      for (
+        let index = 0;
+        index < population;
+        index++
+      ) {
+
+        const point =
+          neonLandscapeFaunaSpot(
+            animal.id,
+            index
+          );
 
 
-      const icon =
-        document.createElement(
-          "span"
+        const slot =
+          document.createElement(
+            "div"
+          );
+
+
+        slot.className =
+          `fauna-slot fauna-${animal.id} eco-fauna`;
+
+
+        slot.style.setProperty(
+          "--eco-x",
+          `${point.x}%`
         );
 
-      icon.className =
-        "fauna-icon";
+        slot.style.setProperty(
+          "--eco-y",
+          `${point.y}%`
+        );
 
-      icon.textContent =
-        animal.icon;
+        slot.style.setProperty(
+          "--eco-scale",
+          String(
+            neonLandscapeFaunaScale(
+              animal.id
+            )
+          )
+        );
 
-      icon.title =
-        `${animal.name} #${index + 1}`;
+
+        slot.style.zIndex =
+          String(
+            Math.max(
+              12,
+              Math.round(
+                76 -
+                point.y
+              )
+            )
+          );
 
 
-      slot.appendChild(
-        icon
-      );
+        const icon =
+          document.createElement(
+            "span"
+          );
 
-      forest.appendChild(
-        slot
-      );
+
+        icon.className =
+          "fauna-icon";
+
+        if (
+          animal.id ===
+          "circuit-finch"
+        ) {
+
+          icon.classList.add(
+            "circuit-finch-svg-host"
+          );
+
+          icon.innerHTML = `
+
+            <svg
+              class="circuit-finch-svg"
+              viewBox="0 0 64 40"
+              aria-hidden="true"
+              focusable="false"
+            >
+
+              <path
+                class="finch-svg-tail"
+                d="
+                  M20 21
+                  L5 14
+                  L13 23
+                  L4 30
+                  L21 26
+                  Z
+                "
+              ></path>
+
+              <path
+                class="finch-svg-wing finch-svg-wing-up"
+                d="
+                  M25 22
+                  C18 13 19 5 29 1
+                  C31 10 36 16 40 22
+                  Z
+                "
+              ></path>
+
+              <path
+                class="finch-svg-wing finch-svg-wing-down"
+                d="
+                  M28 22
+                  C23 29 26 36 35 39
+                  C36 31 40 26 43 22
+                  Z
+                "
+              ></path>
+
+              <path
+                class="finch-svg-body"
+                d="
+                  M18 23
+                  C24 15 37 13 48 19
+                  C45 25 35 28 21 27
+                  Z
+                "
+              ></path>
+
+              <circle
+                class="finch-svg-head"
+                cx="48"
+                cy="18"
+                r="6"
+              ></circle>
+
+              <path
+                class="finch-svg-beak"
+                d="
+                  M53 17
+                  L62 20
+                  L53 22
+                  Z
+                "
+              ></path>
+
+              <circle
+                class="finch-svg-eye"
+                cx="50"
+                cy="16.5"
+                r="1.2"
+              ></circle>
+
+            </svg>
+
+          `;
+
+        }
+        else {
+
+          icon.textContent =
+            animal.icon;
+
+        }
+
+        icon.title =
+          `${animal.name} #${index + 1}`;
+
+
+        slot.appendChild(
+          icon
+        );
+
+
+        forest.appendChild(
+          slot
+        );
+
+      }
 
     }
-
-  });
+  );
 
 }
-
 
 function renderCensus() {
 

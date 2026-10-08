@@ -1,128 +1,241 @@
 # Neon Grove: API Support Lab
 
-**Recruiter View:** `technical.html` provides a gamification-free technical portfolio focused exclusively on API and support-engineering work.
+Neon Grove is a hands-on API support and troubleshooting project I built while developing practical REST API and Postman skills.
 
-Neon Grove is a gamified API Support Engineering Lab where learners earn XP, grow a futuristic forest, unlock new tree species, and practice the API troubleshooting skills used in Technical Support, Product Support, Application Support, and Support Engineering roles.
+Instead of stopping at lessons or quizzes, I used the project to practice building requests, inspecting responses, reproducing failures, testing hypotheses, documenting evidence, and working through support-style scenarios.
 
-**Live demo:** Add your GitHub Pages URL here after deployment.
+> Independent educational portfolio project. Not affiliated with or endorsed by Postman.
 
-## Why I built this
+## Recruiter View
 
-I wanted a hands-on way to learn APIs and Postman that focused on troubleshooting rather than passive course completion. The lab turns core API concepts into short lessons, practical challenges, quizzes, and support-ticket simulations.
+The project includes a dedicated **Recruiter View** that removes the gamification and presents the technical work directly:
 
-The project is designed around a simple loop:
+- completed hands-on exercises
+- submitted investigation answers
+- Postman screenshots
+- troubleshooting evidence
+- automated test results
+- support-case reasoning
+- capstone investigation
+- technical project assets
 
-**Learn → see a complete example → try it → break it → diagnose it → explain the evidence**
+Open:
 
-## Skills covered
+`technical.html`
 
-- API client/server and request/response mental models
+## What this project demonstrates
+
+Through the completed lab, I practiced:
+
+- API client/server and request/response concepts
 - REST-style HTTP methods
-- Endpoints, path parameters, and query parameters
-- Headers
-- JSON and request bodies
-- HTTP responses and status codes
-- Authentication vs. authorization
-- API keys, Bearer tokens, Basic Auth, and OAuth concepts
+- endpoints and URLs
+- query parameters
+- custom request headers
+- JSON request bodies
+- HTTP response inspection
+- 2xx and 4xx status-code troubleshooting
+- authentication vs. authorization concepts
+- Bearer-token configuration
 - Postman variables and environments
-- Collections and reusable workflows
-- Post-response tests
-- Evidence-based API troubleshooting
-- Support-ticket investigation and escalation notes
-- Capstone investigation
+- reusable collections and folders
+- automated Postman response tests
+- deliberately failing a test to verify the assertion works
+- reproducing a known failure
+- comparing working and failing requests
+- isolating a changed request element
+- documenting root cause, correction, and verification
+- support-ticket reasoning
+- technical investigation summaries
 
-## Portfolio features
+This project does **not** represent production API engineering experience. It demonstrates that I have already worked hands-on with the core tools and concepts and can build on them in a Technical Support, Product Support, Application Support, or Support Engineering environment.
 
-- Static HTML/CSS/JavaScript: easy to inspect and deploy
-- Progress stored locally in the browser with `localStorage`
-- XP and module completion
-- Knowledge checks
-- Troubleshooting scenarios
-- Sanitized sample Postman collection and environment
-- No real credentials or secrets
+## Capstone investigation
+
+The final capstone combines the skills practiced throughout the lab.
+
+I:
+
+1. started with a known-good POST request
+2. sent a JSON payload using an environment variable
+3. verified a successful `200 OK` response
+4. added an automated Postman status test
+5. introduced one controlled endpoint failure
+6. observed the resulting `404 Not Found`
+7. confirmed the automated test detected the unexpected response
+8. compared the working and failing requests
+9. identified the relevant change
+10. corrected the request
+11. verified the response returned to `200 OK`
+12. confirmed the automated test passed again
+13. documented the symptom, evidence, root cause, fix, and verification
+
+The goal was not to invent an unfamiliar API architecture from scratch. It was to demonstrate a repeatable troubleshooting process using evidence.
+
+## Support-style practice
+
+The lab also includes support scenarios that require more than recognizing status codes.
+
+Examples include:
+
+- identifying a missing query filter from a customer's request
+- comparing expected vs. actual request data
+- reasoning about a `401` in the context of environment-specific authentication values
+- documenting findings in concise support notes
+- distinguishing transport success from correct application behavior
+
+## Recruiter evidence
+
+Completed work can be reviewed through the Recruiter View.
+
+Published evidence is stored in:
+
+~~~text
+evidence/recruiter-evidence.json
+~~~
+
+The evidence includes submitted answers and sanitized screenshots from the hands-on exercises.
+
+No real customer information, production credentials, passwords, or API secrets are used.
+
+## Neon Grove learning system
+
+The main interface turns the curriculum into a small progression system.
+
+Features include:
+
+- 13 API support modules
+- guided Postman exercises
+- module quizzes
+- hands-on evidence submission
+- screenshot evidence
+- XP progression
+- unlockable trees and wildlife
+- a growing forest ecosystem
+- separate recruiter-facing technical presentation
+
+The gamification exists to make repeated technical practice more engaging. It is not required to understand the portfolio evidence.
+
+## Learning flow
+
+The project follows a consistent progression:
+
+**Learn -> see an example -> perform the task -> inspect the result -> troubleshoot -> explain the evidence**
+
+Later modules reduce the amount of guidance so that the technical reasoning comes from the learner rather than the tutorial.
+
+## Technology
+
+Neon Grove is intentionally lightweight:
+
+- HTML
+- CSS
+- vanilla JavaScript
+- browser `localStorage`
+- Postman
+- Postman Echo API
+- static JSON evidence
+- Git / GitHub
+
+There is no framework or build system required.
 
 ## Run locally
 
-No build step is required.
+Clone the repository and serve the project from its root directory.
 
-1. Clone the repository.
-2. Open `index.html` in a browser.
+~~~powershell
+cd C:\Projects\api-support-lab
+python -m http.server 8010
+~~~
 
-For a more realistic local web-server setup, you can run:
+Then open:
 
-```powershell
-python -m http.server 8000
-```
+~~~text
+http://localhost:8010
+~~~
 
-Then visit `http://localhost:8000`.
+Recruiter View:
 
-## Deploy with GitHub Pages
-
-In GitHub:
-
-1. Open **Settings → Pages**.
-2. Under **Build and deployment**, select **Deploy from a branch**.
-3. Select your default branch and the root (`/`) folder.
-4. Save.
-5. Add the generated Pages URL to the **Live demo** line at the top of this README.
+~~~text
+http://localhost:8010/technical.html
+~~~
 
 ## Repository structure
 
-```text
+~~~text
 api-support-lab/
-├─ index.html
-├─ styles.css
-├─ app.js
-├─ data/
-│  └─ lessons.js
-├─ postman/
-│  ├─ API-Support-Lab.postman_collection.json
-│  └─ API-Support-Lab.postman_environment.json
-├─ README.md
-├─ LICENSE
-└─ .gitignore
-```
+|-- index.html
+|-- technical.html
+|-- styles.css
+|-- app.js
+|-- forest.js
+|-- speech.js
+|
+|-- data/
+|   |-- lessons.js
+|   |-- postman-tutorials.js
+|   `-- module-quizzes.js
+|
+|-- evidence/
+|   `-- recruiter-evidence.json
+|
+|-- postman/
+|   |-- API-Support-Lab.postman_collection.json
+|   `-- API-Support-Lab.postman_environment.json
+|
+|-- README.md
+|-- LICENSE
+`-- .gitignore
+~~~
 
-## Security rule
+## Security
 
-Never commit real API keys, passwords, access tokens, refresh tokens, session cookies, or customer data.
+This project uses only safe practice data.
 
-The included Postman environment contains placeholders only.
+Public repository rules:
+
+- no production API keys
+- no passwords
+- no access or refresh tokens
+- no session cookies
+- no customer data
+- no private credentials
+
+Postman environment exports contain safe practice values or placeholders only.
 
 ## Learning references
 
-The explanations and exercises in this project are original. The curriculum is informed by official public technical documentation, including:
+The explanations and exercises in this project are original. The curriculum was informed by official Postman documentation, including:
 
-- Postman Docs — Send parameters and body data with API requests  
+- Postman Docs - Parameters and request data
   https://learning.postman.com/docs/use/send-requests/create-requests/parameters/
-- Postman Docs — Variables  
+
+- Postman Docs - Variables
   https://learning.postman.com/latest-v-12/docs/use/send-requests/variables/variables
-- Postman Docs — Environments  
+
+- Postman Docs - Environments
   https://learning.postman.com/latest-v-12/docs/use/send-requests/variables/environment-variables
-- Postman Docs — Authorization  
+
+- Postman Docs - Authorization
   https://learning.postman.com/docs/sending-requests/authorization/authorization/
-- Postman Docs — Test scripts  
+
+- Postman Docs - Test scripts
   https://learning.postman.com/docs/tests-and-scripts/write-scripts/test-scripts/
 
-This is an independent educational portfolio project. It is not affiliated with or endorsed by Postman.
+## Project status
 
-## Next milestones
+**Core curriculum: complete**
 
-- Add sound effects and achievement unlocks
-- Add a clickable troubleshooting terminal
-- Add more realistic support tickets
-- Add guided Postman exercises with expected outputs
-- Add a status-code drill mode
-- Add auth/OAuth visualizations
-- Add an API log-reading module
-- Add a final recruiter-friendly case study
+**Hands-on Postman lab: complete**
+
+**Support simulations: complete**
+
+**Capstone investigation: complete**
+
+**Recruiter evidence: complete**
+
+The remaining work is deployment and final public-repository presentation.
 
 ## License
 
 MIT
-
-## Neon Grove ecosystem
-
-The learning progression also drives a 13-species wildlife ecosystem. Fauna arrives automatically as lifetime XP, tree population, and botanical biodiversity increase.
-
-Current wildlife includes fireflies, beetles, frogs, finches, koi, moths, owls, hares, geckos, foxes, Cyber Deer, Data Wisps, and the rare Quantum Stag.

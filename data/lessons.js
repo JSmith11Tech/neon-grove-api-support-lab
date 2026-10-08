@@ -174,28 +174,188 @@ window.LAB_MODULES = [
     ["Ticket mindset",`Your job is not merely to name a status code. Build a defensible explanation from evidence and identify the next useful action for the customer or engineering team.`]
   ],
   example:{title:"Ticket 001 — Permission mismatch",body:`A customer's Bearer token returns 200 from <code>/v1/me</code> and 403 from <code>/v1/reports/export</code>. The failure started immediately after the customer changed roles. Your strongest initial investigation area is endpoint authorization—role, scope, or policy—not whether the token string exists.`},
-  challenge:"Write your response to Ticket 001 in five lines: observation, evidence, likely layer, next check, and what would confirm/refute the hypothesis.",
+  challenge:"Reproduce the customer's captured request, compare it with the intended request, identify the missing filter, correct it, and document the evidence that confirms the fix.",
   quiz:{q:"Which note is strongest for escalation?",choices:["API broken. Please fix.","Customer says it does not work.","POST /v1/orders returns 403 at 18:42Z; same Bearer token returns 200 from /v1/me; reproduced twice; request ID abc123.","I think permissions are weird."],answer:2,explain:"A useful escalation includes reproducible facts, timestamps/IDs, comparison evidence, and the exact operation that failed."},
   ticket:{
     id:"TICKET-002",
     title:"Works in Dev, Fails in Production",
-    body:"A customer uses the same Postman collection in Dev and Production. Dev returns 201. Production returns 401. They insist the request is identical.",
-    clues:["The collection uses {{base_url}} and {{api_token}}.","The active environment changes between Dev and Production.","The Production token variable has a value, but you have not yet verified what credential is actually resolved at send time."],
-    ask:"What do you inspect before blaming the Production API?"
+
+    body:
+      "A customer uses the same Postman collection in Dev and Production. Dev returns 201. Production returns 401. They insist the saved request is identical.",
+
+    clues:[
+      "A 401 response commonly points you toward missing or invalid authentication.",
+      "The collection uses {{base_url}} and {{api_token}}.",
+      "The active environment changes between Dev and Production.",
+      "Environment variables can have different values even when the saved request itself does not change."
+    ],
+
+    ask:
+      "Using only what you have learned so far, what should you compare before deciding the Production API is broken?",
+
+    responseFields:[
+
+      {
+        id:"firstCheck",
+
+        label:
+          "1. What part of the request does the 401 make you investigate first?",
+
+        help:
+          "Think about what 401 commonly means.",
+
+        minLength:10,
+
+        conceptGroups:[
+          [
+            "auth",
+            "authentication",
+            "token",
+            "credential",
+            "api_token"
+          ]
+        ],
+
+        validationHint:
+          "A 401 should make you investigate authentication first—for example the token or credential being used."
+      },
+
+      {
+        id:"hypothesis",
+
+        label:
+          "2. Which environment values would you compare between Dev and Production?",
+
+        help:
+          "Use the variable names shown in the ticket evidence.",
+
+        minLength:10,
+
+        conceptGroups:[
+          [
+            "api_token",
+            "token"
+          ],
+          [
+            "base_url",
+            "base url"
+          ]
+        ],
+
+        validationHint:
+          "Compare both api_token and base_url between the Dev and Production environments."
+      },
+
+      {
+        id:"confirmation",
+
+        label:
+          "3. Why can the same saved request behave differently in Dev and Production?",
+
+        help:
+          "Think about what changes when you switch environments.",
+
+        minLength:20,
+
+        conceptGroups:[
+          [
+            "environment",
+            "environments"
+          ],
+          [
+            "different",
+            "change",
+            "changes",
+            "values",
+            "value",
+            "resolve"
+          ]
+        ],
+
+        validationHint:
+          "The active environment can supply different variable values, so the same saved request can use a different base URL or token."
+      }
+
+    ],
+
+    successFeedback:
+      "Correct. A 401 points you toward authentication. Because Dev and Production use different environments, compare their api_token and base_url values before blaming the Production API. The saved request can be identical while its environment values are different."
   }
 },
 {
   id:"capstone",
   title:"Capstone Investigation",
-  subtitle:"Put the whole stack together like a Technical Support Engineer.",
-  tags:["capstone","portfolio","incident analysis"],
+  subtitle:"Combine the Postman skills you practiced in one guided support investigation.",
+  tags:["capstone","portfolio","troubleshooting"],
   xp:350,
+
   lesson:[
-    ["Your deliverable",`Given unfamiliar API documentation, build a clean Postman collection, configure environments, make successful requests, add basic tests, reproduce at least three failures, and document how you diagnosed them.`],
-    ["Portfolio proof",`The finished repo should show your collection exports, sanitized environment examples, troubleshooting write-ups, screenshots, and a short explanation of what each failure taught you.`]
+
+    ["What this capstone proves",`
+      This capstone is not asking you to design an unfamiliar API workflow
+      from scratch.
+
+      <br><br>
+
+      It demonstrates that you can follow a technical procedure,
+      use a saved request and environment variable, send JSON,
+      run an automated response test, observe a controlled failure,
+      compare evidence, correct the problem, and explain the result.
+
+      <br><br>
+
+      Those are practical foundations you can build on in a real
+      Application Support, Product Support, or Technical Support role.
+    `],
+
+    ["What a reviewer can see",`
+      Your completed evidence shows that Postman and REST troubleshooting
+      are no longer completely unfamiliar to you.
+
+      <br><br>
+
+      You have practiced working with methods, endpoints, variables,
+      JSON request bodies, HTTP status codes, tests, controlled
+      troubleshooting, and technical documentation.
+
+      <br><br>
+
+      The goal is evidence of hands-on learning and technical reasoning,
+      not pretending that this beginner project equals production
+      engineering experience.
+    `]
+
   ],
-  example:{title:"Capstone case",body:`A SaaS customer reports that an integration which creates orders has stopped working. Some attempts return 401, others 400. Your task is to determine whether these failures have the same root cause, collect evidence, and document the investigation so another support engineer could reproduce it.`},
-  challenge:"Do not mark this complete until you can explain every request, variable, test, and diagnostic decision in your own words.",
-  quiz:{q:"Two requests fail with different status codes. What should you assume?",choices:["They must share one root cause","They must have unrelated causes","Nothing yet—compare the concrete evidence for each request","Both are server outages"],answer:2,explain:"Different symptoms can share a cause or have separate causes. The evidence decides."}
+
+  example:{
+    title:"Capstone case",
+    body:`
+      You begin with a known-good Postman Echo request that returns
+      <code>200</code>.
+
+      <br><br>
+
+      You add JSON and an automated status test, deliberately change
+      the endpoint so the request returns <code>404</code>, use the
+      before-and-after evidence to identify the endpoint as the cause,
+      restore the correct endpoint, and verify that the request and
+      test succeed again.
+    `
+  },
+
+  challenge:"Complete the guided investigation and be able to explain what changed, what evidence showed the failure, why the endpoint was the root cause, and how you verified the fix.",
+
+  quiz:{
+    q:"A request worked, then returned 404 immediately after only the endpoint path was changed. What is the strongest first conclusion?",
+    choices:[
+      "The JSON body must be corrupt",
+      "The changed endpoint path is the strongest lead",
+      "The entire API is down",
+      "The environment must be deleted"
+    ],
+    answer:1,
+    explain:"Because the endpoint was the only controlled change and the failure appeared immediately afterward, it is the strongest lead. Restore it and verify the result."
+  }
+
 }
 ];

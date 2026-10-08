@@ -1323,7 +1323,7 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
 
           <br><br>
 
-          <strong>Post-response</strong>
+          <strong>After response</strong>
         `
       },
 
@@ -1351,7 +1351,7 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
 
           <br><br>
 
-          Then your post-response test checks the response.
+          Then your After response test checks the response.
         `
       },
 
@@ -1401,19 +1401,44 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
       {
         id: "correctResult",
         label: "What happened when the test expected 200?",
-        expected: ["pass", "passed", "PASS", "Passed"]
+        expected: [
+          "pass",
+          "passed",
+          "test passed",
+          "the test passed",
+          "it passed"
+        ],
+        validationHint:
+          "The test should pass because the actual response was 200 and the test expected 200."
       },
 
       {
         id: "wrongResult",
         label: "What happened when you deliberately expected 201?",
-        expected: ["fail", "failed", "FAIL", "Failed"]
+        expected: [
+          "fail",
+          "failed",
+          "test failed",
+          "the test failed",
+          "it failed"
+        ],
+        validationHint:
+          "The test should fail because the actual response was 200 while the test expected 201."
       },
 
       {
         id: "lesson",
         label: "Why was deliberately breaking the test useful?",
-        minLength: 20
+        minLength: 20,
+        acceptedContains: [
+          "does not match",
+          "mismatch",
+          "detects when",
+          "catches a mismatch",
+          "catches when"
+        ],
+        validationHint:
+          "The point was to prove that the test detects a mismatch between the expected result and the actual response."
       }
 
     ],
@@ -1550,64 +1575,210 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
       "Support Case: Customer Filter Is Missing",
 
     intro:
-      "Treat this like a small support ticket. You have a customer symptom and must reproduce what their client should send.",
+      "You will reproduce what the customer actually sent, compare it with what they intended to send, identify the difference, correct it, and document the evidence.",
 
     steps: [
 
       {
-        title: "Read the ticket",
+        title: "Read the customer report",
         body: `
           Customer report:
 
           <br><br>
 
           <em>
-          "Our integration is supposed to request only open tickets
-          for customer 42, but we are getting the wrong result."
+            "Our integration is supposed to request only open tickets
+            for customer 42, but we are getting the wrong results."
           </em>
+
+          <br><br>
+
+          The customer supplied the request their integration
+          actually sent:
+
+          <br><br>
+
+          <code>
+            GET https://postman-echo.com/get?customer_id=42
+          </code>
+
+          <br><br>
+
+          <strong>Do not fix it yet.</strong>
+
+          <br><br>
+
+          First reproduce exactly what the customer sent.
         `
       },
 
       {
-        title: "Build the expected request",
+        title: "Reproduce the customer's actual request",
         body: `
           In Postman create:
 
           <br><br>
 
           <code>GET https://postman-echo.com/get</code>
+
+          <br><br>
+
+          Open <strong>Params</strong> and add only:
+
+          <br><br>
+
+          <code>customer_id = 42</code>
+
+          <br><br>
+
+          Do <strong>not</strong> add the status parameter yet.
+
+          <br><br>
+
+          Save the request using the exact
+          <strong>Save request as</strong> name shown above.
         `
       },
 
       {
-        title: "Add the required query parameters",
+        title: "Send the customer's request",
         body: `
-          In Params add:
+          Send it.
+
+          <br><br>
+
+          You should receive <code>200 OK</code>.
+
+          <br><br>
+
+          Inspect the response body's <code>args</code> object.
+
+          <br><br>
+
+          It should contain:
+
+          <br><br>
+
+          <code>customer_id: 42</code>
+
+          <br><br>
+
+          but there should be no <code>status</code> value.
+
+          <br><br>
+
+          <strong>Important:</strong>
+
+          <br><br>
+
+          <code>200 OK</code> proves that Postman Echo successfully
+          received and processed the HTTP request.
+
+          <br><br>
+
+          It does <strong>not</strong> prove that the request contains
+          all of the filters required by the customer's business need.
+        `
+      },
+
+      {
+        title: "Compare actual vs expected",
+        body: `
+          The customer said the request should mean:
+
+          <br><br>
+
+          <strong>customer 42</strong><br>
+          <strong>only open tickets</strong>
+
+          <br><br>
+
+          The actual request contains:
+
+          <br><br>
+
+          <code>customer_id = 42</code>
+
+          <br><br>
+
+          but it is missing:
+
+          <br><br>
+
+          <code>status = open</code>
+
+          <br><br>
+
+          That missing query parameter is your working root cause.
+        `
+      },
+
+      {
+        title: "Correct the request",
+        body: `
+          In <strong>Params</strong>, add:
+
+          <br><br>
+
+          <code>status = open</code>
+
+          <br><br>
+
+          The request should now contain:
 
           <br><br>
 
           <code>customer_id = 42</code><br>
           <code>status = open</code>
-        `
-      },
-
-      {
-        title: "Send and verify",
-        body: `
-          Send the request.
 
           <br><br>
 
-          Verify both values appear in the response's
-          <code>args</code>.
+          Send the request again.
         `
       },
 
       {
-        title: "Write a support note",
+        title: "Verify the correction",
         body: `
-          Document what the correctly formed request contains
-          so another support engineer could reproduce it.
+          Inspect <code>args</code> again.
+
+          <br><br>
+
+          Confirm that it now contains:
+
+          <br><br>
+
+          <code>customer_id: 42</code><br>
+          <code>status: open</code>
+
+          <br><br>
+
+          That is the evidence that the corrected request now carries
+          the filter the customer actually required.
+        `
+      },
+
+      {
+        title: "Write the support investigation note",
+        body: `
+          Write a short support note in your own words.
+
+          <br><br>
+
+          Include:
+
+          <br><br>
+
+          <strong>Observation:</strong> what the customer reported.<br>
+          <strong>Evidence:</strong> what the original request contained.<br>
+          <strong>Root cause:</strong> what was missing.<br>
+          <strong>Correction:</strong> what you added.<br>
+          <strong>Verification:</strong> what appeared after the fix.
+
+          <br><br>
+
+          Do not use <code>200 OK</code> alone as proof of the fix.
+          The important evidence is the change in the request parameters.
         `
       }
 
@@ -1616,21 +1787,63 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
     evidence: [
 
       {
-        id: "customer",
-        label: "Expected customer_id",
-        expected: ["42"]
+        id: "customerRequestStatus",
+        label: "What HTTP status did the customer's incomplete request return?",
+        expected: [
+          "200",
+          "200 OK"
+        ],
+        validationHint:
+          "The incomplete request still returned 200 OK. HTTP success does not prove that the required business filter was present."
       },
 
       {
-        id: "statusFilter",
-        label: "Expected status filter",
-        expected: ["open"]
+        id: "missingFilter",
+        label: "Which required query parameter was missing from the customer's request?",
+        expected: [
+          "status",
+          "status=open",
+          "status = open",
+          "status filter",
+          "status query parameter"
+        ],
+        validationHint:
+          "The customer's request included customer_id=42 but omitted the required status=open query parameter."
+      },
+
+      {
+        id: "fixedCustomer",
+        label: "After the fix, what value appeared for customer_id in args?",
+        expected: [
+          "42"
+        ],
+        validationHint:
+          "The corrected response should show customer_id with the value 42."
+      },
+
+      {
+        id: "fixedStatus",
+        label: "After the fix, what value appeared for status in args?",
+        expected: [
+          "open"
+        ],
+        validationHint:
+          "The corrected response should show status with the value open."
       },
 
       {
         id: "supportNote",
-        label: "Write your short support investigation note.",
-        minLength: 35
+        label: "Write your support investigation note: observation, evidence, root cause, correction, and verification.",
+        minLength: 60,
+        acceptedContains: [
+          "missing status",
+          "status=open",
+          "status = open",
+          "status filter",
+          "omitted status"
+        ],
+        validationHint:
+          "Explain that the original request succeeded at the HTTP layer but was missing status=open, then describe the correction and verification."
       }
 
     ],
@@ -1639,103 +1852,292 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
 
   },
 
-
   "Capstone Investigation": {
 
     title:
-      "Capstone: Build and Explain a Complete API Investigation",
+      "Capstone: Reproduce, Test, Diagnose, and Fix",
 
     intro:
-      "This is where the training wheels come off. Use everything you have learned instead of following a single recipe.",
+      "This capstone combines the Postman skills you have already practiced. You are not expected to design an API workflow from scratch. Follow the scenario, collect the evidence yourself, diagnose one controlled failure, fix it, and explain what happened.",
 
     steps: [
 
       {
-        title: "Choose a known-good Echo endpoint",
+        title: "Create the capstone request",
         body: `
-          Start with a request to the Postman Echo API.
+          In your
+          <strong>Neon Grove API Practice</strong>
+          collection, open your existing request:
 
           <br><br>
 
-          Decide what method and endpoint make sense for the data you want to send.
+          <code>14 - Capstone - API Investigation</code>
+
+          <br><br>
+
+          <strong>Reuse this request.</strong>
+          Do not create another capstone request.
+
+          <br><br>
+
+          Set the method to:
+
+          <br><br>
+
+          <code>POST</code>
+
+          <br><br>
+
+          Use this URL:
+
+          <br><br>
+
+          <code>{{base_url}}/post</code>
+
+          <br><br>
+
+          Make sure the environment containing your
+          <code>base_url</code>
+          variable is selected.
+
+          <br><br>
+
+          Save the request using the exact name shown above.
         `
       },
 
       {
-        title: "Use at least one input",
+        title: "Add the JSON request body",
         body: `
-          Include at least one of:
+          Open <strong>Body</strong>.
 
           <br><br>
 
-          query parameter<br>
-          custom header<br>
-          JSON request body
+          Choose <strong>raw</strong>,
+          then choose <strong>JSON</strong>.
+
+          <br><br>
+
+          Enter:
+
+          <br><br>
+
+          <pre>{
+  "customer_id": 42,
+  "status": "open"
+}</pre>
+
+          This gives the request a simple payload that you can
+          recognize again in the response.
         `
       },
 
       {
-        title: "Use your environment",
+        title: "Send the working request",
         body: `
-          Use:
+          Click <strong>Send</strong>.
 
           <br><br>
 
-          <code>{{base_url}}</code>
+          Confirm that the response returns:
 
           <br><br>
 
-          instead of hard-coding the Postman Echo host.
+          <code>200 OK</code>
+
+          <br><br>
+
+          Then inspect the response body.
+
+          <br><br>
+
+          Find the echoed JSON and confirm that you can see:
+
+          <br><br>
+
+          <code>customer_id: 42</code><br>
+          <code>status: open</code>
+
+          <br><br>
+
+          You now have a known-good baseline.
         `
       },
 
       {
-        title: "Add a Post-response test",
+        title: "Add an After response test",
         body: `
-          Add at least one automated test that checks something
-          you genuinely expect from the response.
+          Open <strong>Scripts</strong>,
+          then <strong>After response</strong>.
+
+          <br><br>
+
+          Add this test:
+
+          <br><br>
+
+          <pre>pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});</pre>
+
+          Save the request.
+
+          <br><br>
+
+          Send it again and confirm that the test
+          <strong>passes</strong>.
         `
       },
 
       {
-        title: "Break something",
+        title: "Introduce one controlled failure",
         body: `
-          Deliberately introduce one mistake.
+          Now deliberately change only the endpoint.
 
           <br><br>
 
-          Examples:
+          Change:
 
           <br><br>
 
-          wrong endpoint<br>
-          missing parameter<br>
-          wrong expected test status<br>
-          incorrect body value
+          <code>{{base_url}}/post</code>
+
+          <br><br>
+
+          to:
+
+          <br><br>
+
+          <code>{{base_url}}/does-not-exist</code>
+
+          <br><br>
+
+          Do not change the body, environment, or test.
+
+          <br><br>
+
+          Send the request again.
+
+          <br><br>
+
+          You should now receive
+          <code>404 Not Found</code>,
+          and the test that expects 200 should fail.
+
+          <br><br>
+
+          This is your controlled failure.
         `
       },
 
       {
-        title: "Diagnose and fix it",
+        title: "Diagnose from the evidence",
         body: `
-          Reproduce the failure, identify the evidence,
-          make one controlled correction, and verify the result.
+          Compare the working request with the failing request.
+
+          <br><br>
+
+          Your evidence is:
+
+          <br><br>
+
+          the original request returned <code>200</code><br>
+          the failing request returned <code>404</code><br>
+          the existing test failed because the response no longer matched the expected status
+
+          <br><br>
+
+          Now make the diagnosis yourself.
+
+          <br><br>
+
+          Ask:
+
+          <br><br>
+
+          <strong>What changed between the working and failing requests?</strong><br>
+          <strong>What does that difference suggest is the root cause?</strong><br>
+          <strong>What single correction would test your conclusion?</strong>
+
+          <br><br>
+
+          Do not change anything yet.
+
+          <br><br>
+
+          Record your diagnosis in the evidence section below before
+          moving on to the fix.
         `
       },
 
       {
-        title: "Document the investigation",
+        title: "Test your diagnosis and verify the fix",
         body: `
-          Write a concise technical summary containing:
+          Make the single correction you identified in your diagnosis.
 
           <br><br>
 
-          symptom<br>
-          reproduction<br>
-          evidence<br>
-          root cause<br>
-          fix<br>
-          verification
+          Send the request again.
+
+          <br><br>
+
+          Observe what happens.
+
+          <br><br>
+
+          Then verify:
+
+          <br><br>
+
+          <strong>1.</strong> What HTTP status do you receive?<br>
+          <strong>2.</strong> Do your expected JSON values appear in the response?<br>
+          <strong>3.</strong> Does the After response test pass again?
+
+          <br><br>
+
+          If the request returns to the known-good behavior, that
+          before-and-after evidence supports your diagnosis.
+
+          <br><br>
+
+          Record the result in your investigation evidence.
+        `
+      },
+
+      {
+        title: "Document what you proved",
+        body: `
+          Write a short investigation summary in the evidence section.
+
+          <br><br>
+
+          Use this structure:
+
+          <br><br>
+
+          <strong>Symptom:</strong>
+          what failed.<br>
+
+          <strong>Evidence:</strong>
+          what status or test result you observed.<br>
+
+          <strong>Root cause:</strong>
+          what was wrong.<br>
+
+          <strong>Fix:</strong>
+          what you changed.<br>
+
+          <strong>Verification:</strong>
+          how you proved the request worked again.
+
+          <br><br>
+
+          Use your own words.
+
+          <br><br>
+
+          For portfolio evidence, capture one screenshot of the
+          broken request and one screenshot after the successful fix.
         `
       }
 
@@ -1744,21 +2146,71 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
     evidence: [
 
       {
-        id: "method",
-        label: "HTTP method used",
-        minLength: 3
+        id: "workingStatus",
+        label: "Status of the original working request",
+        expected: [
+          "200",
+          "200 OK"
+        ],
+        validationHint:
+          "The original POST request to /post should return 200 OK."
       },
 
       {
-        id: "successStatus",
-        label: "Final successful status code",
-        expected: ["200", "200 OK", "201", "201 Created"]
+        id: "brokenStatus",
+        label: "Status after changing the endpoint",
+        expected: [
+          "404",
+          "404 Not Found"
+        ],
+        validationHint:
+          "The deliberately incorrect endpoint should return 404 Not Found."
+      },
+
+      {
+        id: "brokenTest",
+        label: "What happened to the 200-status test while the endpoint was broken?",
+        expected: [
+          "fail",
+          "failed",
+          "test failed",
+          "the test failed",
+          "it failed"
+        ],
+        validationHint:
+          "The test should fail because the response is 404 while the test still expects 200."
+      },
+
+      {
+        id: "finalStatus",
+        label: "Status after restoring the correct endpoint",
+        expected: [
+          "200",
+          "200 OK"
+        ],
+        validationHint:
+          "After restoring /post, the request should return 200 OK again."
+      },
+
+      {
+        id: "diagnosis",
+        label: "Your diagnosis: What changed, what does the evidence suggest caused the failure, and what correction did you choose to test?",
+        minLength: 45,
+        acceptedContains: [
+          "endpoint",
+          "path",
+          "url"
+        ],
+        validationHint:
+          "Use the before-and-after evidence. Identify the specific request element that changed, explain why it is your strongest lead, and state the correction you tested."
       },
 
       {
         id: "summary",
-        label: "Your investigation summary",
-        minLength: 80
+        label: "Write your investigation summary: symptom, evidence, root cause, fix, and verification.",
+        minLength: 60,
+        placeholder:
+          "Symptom: ... Evidence: ... Root cause: ... Fix: ... Verification: ..."
       }
 
     ],
@@ -1766,5 +2218,4 @@ window.NEON_GROVE_POSTMAN_TUTORIALS = {
     screenshotRecommended: true
 
   }
-
 };

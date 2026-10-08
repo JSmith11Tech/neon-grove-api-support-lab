@@ -2,543 +2,931 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
 
-  <meta name="description"
-        content="Technical portfolio view for Neon Grove API Support Lab." />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1">
+
+  <meta
+    name="description"
+    content="Recruiter view of hands-on API support work completed in Neon Grove.">
 
   <title>
-    Neon Grove · Technical Portfolio
+    Neon Grove · Recruiter View
   </title>
 
-  <link rel="stylesheet"
-        href="styles.css" />
+  <link
+    rel="stylesheet"
+    href="styles.css">
+
+  <style>
+
+    :root {
+      color-scheme: dark;
+    }
+
+
+    body {
+      margin: 0;
+      background: #07100d;
+      color: #edf7f2;
+    }
+
+
+    .recruiter-shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+
+    .recruiter-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+
+      margin-bottom: 52px;
+    }
+
+
+    .brand-kicker,
+    .section-kicker {
+      margin: 0 0 8px;
+
+      color: #73f9b0;
+
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+
+    .recruiter-topbar h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+
+    .export-button {
+      padding: 10px 16px;
+
+      border: 1px solid #3b9168;
+      border-radius: 999px;
+
+      color: #07120d;
+
+      background: #72f9af;
+
+      font: inherit;
+      font-size: .82rem;
+      font-weight: 900;
+
+      cursor: pointer;
+    }
+
+
+    .export-button:hover {
+      filter: brightness(1.06);
+    }
+
+
+    .export-button:active {
+      transform: translateY(1px);
+    }
+
+    .back-link {
+      padding: 10px 16px;
+
+      border: 1px solid #285d47;
+      border-radius: 999px;
+
+      color: #b7d8c7;
+      text-decoration: none;
+    }
+
+
+    .hero {
+      display: grid;
+      gap: 18px;
+
+      margin-bottom: 58px;
+    }
+
+
+    .hero h2 {
+      max-width: 780px;
+      margin: 0;
+
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      line-height: .98;
+    }
+
+
+    .hero > p {
+      max-width: 760px;
+      margin: 0;
+
+      color: #9db9ab;
+
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+
+      margin-top: 6px;
+    }
+
+
+    .hero-tags span {
+      padding: 7px 11px;
+
+      border: 1px solid #285d47;
+      border-radius: 999px;
+
+      color: #aee5c8;
+
+      font-size: .76rem;
+    }
+
+
+    .local-note {
+      display: none;
+
+      margin: 0 0 30px;
+      padding: 14px 16px;
+
+      border: 1px solid #66582b;
+      border-radius: 10px;
+
+      color: #d8c987;
+      background: rgba(110, 89, 25, .12);
+
+      line-height: 1.55;
+    }
+
+
+    .portfolio-section {
+      margin-top: 46px;
+    }
+
+
+    .section-heading {
+      margin-bottom: 24px;
+    }
+
+
+    .section-heading h2 {
+      margin: 0;
+
+      font-size: 2rem;
+    }
+
+
+    .section-heading p {
+      max-width: 720px;
+      margin: 10px 0 0;
+
+      color: #91aa9e;
+
+      line-height: 1.6;
+    }
+
+
+    #evidenceGrid {
+      display: grid;
+      gap: 22px;
+    }
+
+
+    .evidence-card {
+      overflow: hidden;
+
+      border: 1px solid #294b3d;
+      border-radius: 16px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(14, 39, 29, .94),
+          rgba(8, 23, 18, .96)
+        );
+    }
+
+
+    .evidence-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+
+      padding: 24px 26px 20px;
+
+      border-bottom: 1px solid rgba(78, 127, 104, .24);
+    }
+
+
+    .evidence-head h3 {
+      margin: 5px 0 0;
+
+      font-size: 1.45rem;
+    }
+
+
+    .evidence-type {
+      color: #72f9af;
+
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+
+
+    .status-badge {
+      flex: 0 0 auto;
+
+      height: fit-content;
+
+      padding: 7px 10px;
+
+      border: 1px solid #377b5b;
+      border-radius: 999px;
+
+      color: #9ff4c3;
+
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+
+    .status-badge.progress {
+      border-color: #655c36;
+      color: #d9ca83;
+    }
+
+
+    .evidence-body {
+      display: grid;
+      gap: 24px;
+
+      padding: 24px 26px 28px;
+    }
+
+
+    .evidence-block h4 {
+      margin: 0 0 8px;
+
+      color: #95aa9f;
+
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+
+    .evidence-block p {
+      margin: 0;
+
+      color: #dce9e2;
+
+      line-height: 1.65;
+    }
+
+
+    .answers {
+      display: grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(210px, 1fr)
+        );
+
+      gap: 12px;
+    }
+
+
+    .answer {
+      padding: 14px;
+
+      border: 1px solid #28483b;
+      border-radius: 10px;
+
+      background: rgba(2, 17, 12, .38);
+    }
+
+
+    .answer span {
+      display: block;
+
+      margin-bottom: 7px;
+
+      color: #7d9b8d;
+
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+
+    .answer strong {
+      display: block;
+
+      color: #f1faf5;
+
+      font-size: .92rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+
+    .evidence-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+
+    .meta-pill {
+      padding: 8px 11px;
+
+      border: 1px solid #315e4a;
+      border-radius: 8px;
+
+      color: #afd8c2;
+
+      font-size: .76rem;
+    }
+
+
+    .screenshots {
+      display: grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            min(300px, 100%),
+            1fr
+          )
+        );
+
+      gap: 14px;
+    }
+
+
+    .shot {
+      display: grid;
+      gap: 9px;
+
+      margin: 0;
+      padding: 10px;
+
+      border: 1px solid #294b3d;
+      border-radius: 12px;
+
+      background: #06130e;
+    }
+
+
+    .shot a {
+      display: block;
+    }
+
+
+    .shot img {
+      display: block;
+
+      width: 100%;
+      max-height: 390px;
+
+      object-fit: contain;
+
+      border-radius: 8px;
+
+      background: #030a07;
+    }
+
+
+    .shot figcaption {
+      color: #a8c1b5;
+
+      font-size: .76rem;
+      line-height: 1.45;
+    }
+
+
+    .empty-state {
+      padding: 30px;
+
+      border: 1px dashed #315141;
+      border-radius: 14px;
+
+      color: #87a093;
+
+      text-align: center;
+      line-height: 1.7;
+    }
+
+
+    .asset-divider {
+      margin: 64px 0 0;
+
+      border: 0;
+      border-top: 1px solid #263a32;
+    }
+
+
+    .assets {
+      display: grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(240px, 1fr)
+        );
+
+      gap: 16px;
+
+      margin-top: 24px;
+    }
+
+
+    .asset {
+      padding: 20px;
+
+      border: 1px solid #2b3c35;
+      border-radius: 12px;
+
+      background: #0b1310;
+    }
+
+
+    .asset-label {
+      color: #829b90;
+
+      font-size: .66rem;
+      font-weight: 900;
+      letter-spacing: .13em;
+    }
+
+
+    .asset h3 {
+      margin: 8px 0 8px;
+
+      font-size: 1rem;
+    }
+
+
+    .asset p {
+      margin: 0 0 16px;
+
+      color: #899f94;
+
+      font-size: .82rem;
+      line-height: 1.55;
+    }
+
+
+    .asset a {
+      color: #b7dfca;
+
+      font-size: .78rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+
+    @media (max-width: 700px) {
+
+      .recruiter-shell {
+        width: min(100% - 24px, 1180px);
+      }
+
+
+      .recruiter-topbar,
+      .evidence-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+
+    /* =========================================================
+       NEON GROVE EVIDENCE LIGHTBOX
+       ========================================================= */
+
+    .shot-zoom {
+      display: block;
+
+      border-radius: 8px;
+
+      cursor: zoom-in;
+
+      text-decoration: none;
+    }
+
+
+    .shot-zoom img {
+      transition:
+        transform .18s ease,
+        border-color .18s ease;
+    }
+
+
+    .shot-zoom:hover img {
+      transform:
+        scale(1.01);
+
+      border-color:
+        #69d89c;
+    }
+
+
+    .evidence-lightbox {
+      width:
+        min(
+          94vw,
+          1500px
+        );
+
+      max-width:
+        none;
+
+      height:
+        min(
+          92vh,
+          1000px
+        );
+
+      max-height:
+        none;
+
+      padding:
+        44px 20px 20px;
+
+      border:
+        1px solid
+        #39795a;
+
+      border-radius:
+        16px;
+
+      overflow: hidden;
+
+      background:
+        rgba(
+          2,
+          12,
+          8,
+          .97
+        );
+
+      box-shadow:
+        0 24px 80px
+        rgba(
+          0,
+          0,
+          0,
+          .70
+        );
+    }
+
+
+    .evidence-lightbox::backdrop {
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          .82
+        );
+
+      backdrop-filter:
+        blur(4px);
+    }
+
+
+    .evidence-lightbox img {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+
+      border-radius: 8px;
+    }
+
+
+    .evidence-lightbox-close {
+      position: absolute;
+
+      top: 9px;
+      right: 12px;
+
+      width: 34px;
+      height: 34px;
+
+      display: grid;
+
+      place-items: center;
+
+      padding: 0;
+
+      border:
+        1px solid
+        #39795a;
+
+      border-radius: 50%;
+
+      color:
+        #dffff0;
+
+      background:
+        #071a12;
+
+      font-size:
+        1.3rem;
+
+      line-height: 1;
+
+      cursor: pointer;
+    }
+
+
+    .evidence-lightbox-close:hover {
+      border-color:
+        #72f9af;
+
+      color:
+        #72f9af;
+    }
+
+  </style>
+
 </head>
 
-<body class="technical-page">
+<body>
 
-  <header class="technical-topbar">
+  <main class="recruiter-shell">
 
-    <div>
-      <p class="technical-kicker">
-        RECRUITER VIEW
-      </p>
-
-      <h1>
-        API Support Engineering Portfolio
-      </h1>
-    </div>
-
-    
-      <div class="mode-toggle technical-mode-toggle"
-           aria-label="Portfolio view">
-
-        <a class="mode-option"
-           href="index.html">
-          🌲 Grove Mode
-        </a>
-
-        <span class="mode-option active">
-          💼 Recruiter View
-        </span>
-
-      </div>
-    <nav class="technical-nav">
-
-      <a href="index.html">
-        Learning Lab
-      </a>
-
-      <a href="https://github.com/JSmith11Tech/neon-grove-api-support-lab"
-         target="_blank"
-         rel="noopener">
-        GitHub Repository
-      </a>
-
-    </nav>
-
-  </header>
-
-
-  <main class="technical-shell">
-
-    <section class="technical-hero">
+    <header class="recruiter-topbar">
 
       <div>
 
-        <p class="technical-kicker">
-          NEON GROVE: API SUPPORT LAB
+        <p class="brand-kicker">
+          Neon Grove
         </p>
 
-        <h2>
-          Hands-on API troubleshooting and support-engineering practice.
-        </h2>
+        <h1>
+          API Support Portfolio
+        </h1>
 
-        <p>
-          This view intentionally removes the gamification layer and
-          focuses exclusively on the technical work demonstrated in
-          the project: REST APIs, HTTP, Postman, JSON, authentication,
-          testing, troubleshooting, and support-case investigation.
-        </p>
+      </div>
+
+
+      <div class="top-actions">
+
+        <button
+          id="exportEvidenceBtn"
+          class="export-button"
+          type="button">
+
+          Export Recruiter Evidence
+
+        </button>
+
+
+        <a
+          class="back-link"
+          href="index.html">
+
+          ← Grove Mode
+
+        </a>
+
+      </div>
+
+    </header>
+
+
+    <section class="hero">
+
+      <p class="section-kicker">
+        Hands-on technical evidence
+      </p>
+
+      <h2>
+        See the work, not just the skills list.
+      </h2>
+
+      <p>
+        Neon Grove documents practical API support exercises:
+        building requests, inspecting responses, troubleshooting
+        behavior, and explaining the results.
+      </p>
+
+
+      <div class="hero-tags">
+
+        <span>REST APIs</span>
+        <span>HTTP</span>
+        <span>JSON</span>
+        <span>Postman</span>
+        <span>API Troubleshooting</span>
 
       </div>
 
     </section>
 
 
-    <section class="technical-section">
+    <div
+      id="localNote"
+      class="local-note">
 
-      <div class="technical-heading">
+      Local portfolio preview.
+      This page is currently reading evidence from Jay's local
+      Neon Grove progress. Public evidence publishing will be
+      enabled separately.
 
-        <p class="technical-kicker">
-          CORE SKILLS
-        </p>
-
-        <h2>
-          Technical Coverage
-        </h2>
-
-      </div>
+    </div>
 
 
-      <div class="technical-skill-grid">
+    <section class="portfolio-section">
 
-        <article>
-          <strong>REST APIs</strong>
-          <span>Requests, resources, endpoints, request/response flow</span>
-        </article>
+      <div class="section-heading">
 
-        <article>
-          <strong>HTTP Methods</strong>
-          <span>GET, POST, PUT, PATCH, DELETE</span>
-        </article>
-
-        <article>
-          <strong>HTTP Status Codes</strong>
-          <span>2xx, 4xx, 5xx troubleshooting patterns</span>
-        </article>
-
-        <article>
-          <strong>JSON</strong>
-          <span>Request payloads, response bodies, syntax and validation</span>
-        </article>
-
-        <article>
-          <strong>Headers</strong>
-          <span>Content-Type, Accept, Authorization, custom headers</span>
-        </article>
-
-        <article>
-          <strong>Parameters</strong>
-          <span>Path parameters and query parameters</span>
-        </article>
-
-        <article>
-          <strong>Authentication</strong>
-          <span>API keys, Bearer tokens, Basic Auth, OAuth concepts</span>
-        </article>
-
-        <article>
-          <strong>Authorization</strong>
-          <span>Roles, permissions, scopes, 401 vs. 403 analysis</span>
-        </article>
-
-        <article>
-          <strong>Postman</strong>
-          <span>Collections, environments, variables, reusable requests</span>
-        </article>
-
-        <article>
-          <strong>API Testing</strong>
-          <span>Post-response assertions and expected-behavior validation</span>
-        </article>
-
-        <article>
-          <strong>Error Reproduction</strong>
-          <span>Controlled testing and known-good comparisons</span>
-        </article>
-
-        <article>
-          <strong>Technical Escalation</strong>
-          <span>Evidence, timestamps, request IDs, reproduction details</span>
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <section class="technical-section">
-
-      <div class="technical-heading">
-
-        <p class="technical-kicker">
-          PORTFOLIO ARTIFACTS
+        <p class="section-kicker">
+          Completed lab evidence
         </p>
 
         <h2>
           Inspect the Work
         </h2>
 
+        <p>
+          Submitted answers and screenshots from hands-on
+          exercises are shown directly below. Raw project files
+          are available separately under Technical Assets.
+        </p>
+
       </div>
 
 
-      <div class="artifact-grid">
+      <div id="evidenceGrid">
 
-        <a class="artifact-card"
-           href="postman/API-Support-Lab.postman_collection.json"
-           target="_blank">
-
-          <span class="artifact-type">
-            POSTMAN
-          </span>
-
-          <strong>
-            API Support Lab Collection
-          </strong>
-
-          <p>
-            Reusable GET and POST requests, parameters,
-            headers, JSON payloads, and response tests.
-          </p>
-
-          <span class="artifact-action">
-            View collection →
-          </span>
-
-        </a>
-
-
-        <a class="artifact-card"
-           href="postman/API-Support-Lab.postman_environment.json"
-           target="_blank">
-
-          <span class="artifact-type">
-            POSTMAN
-          </span>
-
-          <strong>
-            Safe Practice Environment
-          </strong>
-
-          <p>
-            Sanitized environment demonstrating variables,
-            base URLs, IDs, and safe credential placeholders.
-          </p>
-
-          <span class="artifact-action">
-            View environment →
-          </span>
-
-        </a>
-
-
-        <a class="artifact-card"
-           href="data/lessons.js"
-           target="_blank">
-
-          <span class="artifact-type">
-            SOURCE
-          </span>
-
-          <strong>
-            Technical Curriculum Data
-          </strong>
-
-          <p>
-            API lessons, support scenarios, hands-on
-            challenges, and troubleshooting exercises.
-          </p>
-
-          <span class="artifact-action">
-            View source →
-          </span>
-
-        </a>
-
-
-        <a class="artifact-card"
-           href="https://github.com/JSmith11Tech/neon-grove-api-support-lab"
-           target="_blank"
-           rel="noopener">
-
-          <span class="artifact-type">
-            GITHUB
-          </span>
-
-          <strong>
-            Project Repository
-          </strong>
-
-          <p>
-            Source code, Postman artifacts, commit history,
-            documentation, and project evolution.
-          </p>
-
-          <span class="artifact-action">
-            Open repository →
-          </span>
-
-        </a>
+        <div class="empty-state">
+          Loading submitted lab evidence…
+        </div>
 
       </div>
 
     </section>
 
 
-    <section class="technical-section">
+    <hr class="asset-divider">
 
-      <div class="technical-heading">
 
-        <p class="technical-kicker">
-          SUPPORT ENGINEERING
+    <section class="portfolio-section">
+
+      <div class="section-heading">
+
+        <p class="section-kicker">
+          Supporting files
         </p>
 
         <h2>
-          Troubleshooting Workflow
-        </h2>
-
-      </div>
-
-
-      <div class="workflow-list">
-
-        <article>
-          <span>01</span>
-
-          <div>
-            <strong>
-              Reproduce the exact request
-            </strong>
-
-            <p>
-              Capture method, URL, parameters, headers,
-              authentication, request body, and environment.
-            </p>
-          </div>
-        </article>
-
-
-        <article>
-          <span>02</span>
-
-          <div>
-            <strong>
-              Read the server evidence
-            </strong>
-
-            <p>
-              Inspect status code, response headers,
-              response body, error details, request IDs,
-              and timing.
-            </p>
-          </div>
-        </article>
-
-
-        <article>
-          <span>03</span>
-
-          <div>
-            <strong>
-              Compare expected vs. actual
-            </strong>
-
-            <p>
-              Use documentation or a known-good request
-              to identify the earliest meaningful difference.
-            </p>
-          </div>
-        </article>
-
-
-        <article>
-          <span>04</span>
-
-          <div>
-            <strong>
-              Test one hypothesis at a time
-            </strong>
-
-            <p>
-              Change one meaningful variable, rerun the request,
-              and record the result.
-            </p>
-          </div>
-        </article>
-
-
-        <article>
-          <span>05</span>
-
-          <div>
-            <strong>
-              Document or escalate with evidence
-            </strong>
-
-            <p>
-              Provide reproducible facts rather than vague
-              descriptions or unsupported conclusions.
-            </p>
-          </div>
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <section class="technical-section">
-
-      <div class="technical-heading">
-
-        <p class="technical-kicker">
-          TROUBLESHOOTING CASES
-        </p>
-
-        <h2>
-          Example Investigation Areas
-        </h2>
-
-      </div>
-
-
-      <div class="case-grid">
-
-        <article>
-
-          <code>
-            401 Unauthorized
-          </code>
-
-          <h3>
-            Authentication Failure
-          </h3>
-
-          <p>
-            Investigate missing, malformed, expired, or
-            incorrect credentials and token configuration.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <code>
-            403 Forbidden
-          </code>
-
-          <h3>
-            Authorization Failure
-          </h3>
-
-          <p>
-            Investigate roles, permissions, scopes,
-            policies, and endpoint-specific access.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <code>
-            400 / 422
-          </code>
-
-          <h3>
-            Payload Problem
-          </h3>
-
-          <p>
-            Validate JSON syntax, required fields,
-            field names, data types, and content format.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <code>
-            DEV → PROD
-          </code>
-
-          <h3>
-            Environment Mismatch
-          </h3>
-
-          <p>
-            Compare resolved base URLs, variables,
-            credentials, API versions, and environment state.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <code>
-            429
-          </code>
-
-          <h3>
-            Rate Limiting
-          </h3>
-
-          <p>
-            Inspect request frequency, retry headers,
-            limits, and backoff behavior.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <code>
-            5xx
-          </code>
-
-          <h3>
-            Server-Side Failure
-          </h3>
-
-          <p>
-            Capture reproducible evidence, request IDs,
-            timestamps, scope, and known-good comparisons
-            before escalation.
-          </p>
-
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <section class="technical-section technical-next">
-
-      <div>
-
-        <p class="technical-kicker">
-          PROJECT DIRECTION
-        </p>
-
-        <h2>
-          Evidence will grow with the coursework.
+          Technical Assets
         </h2>
 
         <p>
-          As hands-on exercises and capstone investigations
-          are completed, this page will surface the resulting
-          Postman requests, tests, troubleshooting write-ups,
-          and case-study evidence.
+          Importable source files and repository materials for
+          reviewers who want to inspect the implementation itself.
         </p>
+
+      </div>
+
+
+      <div class="assets">
+
+        <article class="asset">
+
+          <span class="asset-label">
+            POSTMAN
+          </span>
+
+          <h3>
+            API Support Lab Collection
+          </h3>
+
+          <p>
+            Importable Postman collection containing reusable API
+            requests and tests.
+          </p>
+
+          <a
+            href="postman/API-Support-Lab.postman_collection.json"
+            target="_blank">
+
+            View raw collection →
+
+          </a>
+
+        </article>
+
+
+        <article class="asset">
+
+          <span class="asset-label">
+            POSTMAN
+          </span>
+
+          <h3>
+            Practice Environment
+          </h3>
+
+          <p>
+            Sanitized environment variables used for safe API
+            practice.
+          </p>
+
+          <a
+            href="postman/API-Support-Lab.postman_environment.json"
+            target="_blank">
+
+            View raw environment →
+
+          </a>
+
+        </article>
+
+
+        <article class="asset">
+
+          <span class="asset-label">
+            SOURCE
+          </span>
+
+          <h3>
+            Curriculum Data
+          </h3>
+
+          <p>
+            Lesson definitions, technical scenarios, and hands-on
+            challenges.
+          </p>
+
+          <a
+            href="data/lessons.js"
+            target="_blank">
+
+            View source →
+
+          </a>
+
+        </article>
+
+
+        <article class="asset">
+
+          <span class="asset-label">
+            GITHUB
+          </span>
+
+          <h3>
+            Project Repository
+          </h3>
+
+          <p>
+            Source code, documentation, commit history, and project
+            evolution.
+          </p>
+
+          <a
+            href="https://github.com/JSmith11Tech/neon-grove-api-support-lab"
+            target="_blank"
+            rel="noopener">
+
+            Open repository →
+
+          </a>
+
+        </article>
 
       </div>
 
@@ -546,5 +934,1663 @@
 
   </main>
 
+
+  <dialog
+    id="evidenceLightbox"
+    class="evidence-lightbox"
+    onclick="
+      if (
+        event.target === this
+      ) {
+        this.close();
+      }
+    ">
+
+    <button
+      type="button"
+      class="evidence-lightbox-close"
+      aria-label="Close enlarged screenshot"
+      onclick="
+        document
+          .getElementById(
+            'evidenceLightbox'
+          )
+          .close();
+      ">
+
+      ×
+
+    </button>
+
+    <img
+      id="evidenceLightboxImage"
+      src=""
+      alt="">
+
+  </dialog>
+
+
+  <script>
+
+    function openEvidenceLightbox(
+      sourceImage
+    ) {
+
+      if (!sourceImage) {
+        return;
+      }
+
+
+      const dialog =
+        document.getElementById(
+          "evidenceLightbox"
+        );
+
+
+      const image =
+        document.getElementById(
+          "evidenceLightboxImage"
+        );
+
+
+      image.src =
+        sourceImage.currentSrc ||
+        sourceImage.src;
+
+
+      image.alt =
+        sourceImage.alt ||
+        "Lab evidence screenshot";
+
+
+      dialog.showModal();
+
+    }
+
+  </script>
+
+  <script src="data/lessons.js"></script>
+  <script src="data/postman-tutorials.js"></script>
+  <script src="data/module-quizzes.js"></script>
+
+
+  <script>
+
+    const practiceKey =
+      "neon-grove-practice-state";
+
+
+    const quizKey =
+      "neon-grove-module-quiz-state";
+
+
+    function readJson(
+      key
+    ) {
+
+      try {
+
+        return JSON.parse(
+          localStorage.getItem(key) ||
+          "{}"
+        );
+
+      }
+      catch {
+
+        return {};
+
+      }
+
+    }
+
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value ?? ""
+      )
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+        .replaceAll(
+          '"',
+          "&quot;"
+        );
+
+    }
+
+
+    function prettyField(
+      name
+    ) {
+
+      const known = {
+
+        client:
+          "Client",
+
+        method:
+          "Method",
+
+        status:
+          "Response Status",
+
+        getStatus:
+          "GET Status",
+
+        postStatus:
+          "POST Status",
+
+        observation:
+          "What I observed",
+
+        mentalModel:
+          "Request / Response Flow",
+
+        methodMeaning:
+          "What I observed"
+
+      };
+
+
+      if (
+        known[name]
+      ) {
+        return known[name];
+      }
+
+
+      return String(name)
+        .replace(
+          /([a-z])([A-Z])/g,
+          "$1 $2"
+        )
+        .replace(
+          /^./,
+          letter =>
+            letter.toUpperCase()
+        );
+
+    }
+
+
+    function screenshotsFor(
+      stored
+    ) {
+
+      if (
+        typeof stored === "string" &&
+        stored
+      ) {
+
+        return [
+          {
+            dataUrl: stored,
+            caption: ""
+          }
+        ];
+
+      }
+
+
+      if (
+        Array.isArray(stored)
+      ) {
+
+        return stored
+          .map(
+            item => {
+
+              if (
+                typeof item === "string"
+              ) {
+
+                return {
+                  dataUrl: item,
+                  caption: ""
+                };
+
+              }
+
+
+              return {
+
+                dataUrl:
+                  item.dataUrl ||
+                  item.image ||
+                  "",
+
+                caption:
+                  item.caption ||
+                  ""
+
+              };
+
+            }
+          )
+          .filter(
+            item =>
+              item.dataUrl
+          );
+
+      }
+
+
+      return [];
+
+    }
+
+
+    function moduleFromMission(
+      key
+    ) {
+
+      if (
+        key ===
+        "postman-bootcamp-v1"
+      ) {
+        return null;
+      }
+
+
+      const id =
+        key
+          .replace(
+            /^postman-/,
+            ""
+          )
+          .replace(
+            /^practice-/,
+            ""
+          );
+
+
+      return (
+        window.LAB_MODULES ||
+        []
+      )
+        .find(
+          module =>
+            module.id === id
+        ) ||
+        null;
+
+    }
+
+
+    function tutorialFromModule(
+      module
+    ) {
+
+      if (!module) {
+        return null;
+      }
+
+
+      return (
+        window
+          .NEON_GROVE_POSTMAN_TUTORIALS ||
+        {}
+      )[module.title] ||
+      null;
+
+    }
+
+
+    function quizCountFor(
+      module
+    ) {
+
+      if (!module) {
+        return 5;
+      }
+
+
+      const bank =
+        window
+          .NEON_GROVE_MODULE_QUIZZES_ALIAS ||
+        {};
+
+
+      const questions =
+        bank[module.title];
+
+
+      return Array.isArray(
+        questions
+      )
+        ? questions.length
+        : 5;
+
+    }
+
+
+    function evidenceTitle(
+      key,
+      module,
+      tutorial
+    ) {
+
+      if (
+        key ===
+        "postman-bootcamp-v1"
+      ) {
+
+        return "First API Request";
+
+      }
+
+
+      return (
+        tutorial?.title ||
+        module?.title ||
+        key
+      );
+
+    }
+
+
+    function evidenceChallenge(
+      key,
+      module,
+      tutorial
+    ) {
+
+      /*
+        Recruiter View descriptions intentionally describe the
+        work actually demonstrated in the submitted evidence.
+
+        They do not necessarily repeat the broader curriculum
+        challenge stored in lessons.js.
+      */
+
+      if (
+        key ===
+        "postman-bootcamp-v1"
+      ) {
+
+        return "Create and send a first GET request in Postman, inspect the response, and confirm the method, URL, and successful HTTP status.";
+
+      }
+
+
+      const moduleId =
+        module?.id ||
+        "";
+
+
+      const recruiterChallenges = {
+
+        "api-mental-model":
+          "Identify the client, request, server, and response in a successful API interaction and explain the request/response flow.",
+
+        "http-methods":
+          "Send both GET and POST requests, confirm successful responses, and explain the different action each method performed.",
+
+        "urls-parameters":
+          "Build a GET request with query parameters, send it successfully, and verify that the expected parameter values appear in the response.",
+
+        "headers":
+          "Add a custom HTTP header in Postman, send the request, and verify in the echoed response that the header name and value were transmitted.",
+
+        "json-bodies":
+          "Send a POST request with a valid JSON body, verify the returned JSON data, and confirm the request used application/json.",
+
+        "responses-status":
+          "Compare a successful request with a deliberately missing endpoint and use the 200 and 404 responses as troubleshooting evidence.",
+
+        "auth":
+          "Configure Bearer-token authentication in Postman, identify the Authorization header, and explain the difference between authentication and authorization.",
+
+        "variables-env":
+          "Create a base_url environment variable, use it in a request instead of hard-coding the host, and verify that the variable-based request succeeds.",
+
+        "collections":
+          "Organize existing requests into a Core Diagnostics folder so related diagnostic work is repeatable and easier to navigate.",
+
+        "tests":
+          "Add an automated status-code test, confirm it passes for the expected 200 response, deliberately make the expectation wrong, and verify that the test detects the failure.",
+
+        "troubleshooting":
+          "Reproduce a 404 failure, compare it with a known-good request, identify the URL path as the relevant difference, correct it, and verify the request returns 200.",
+
+        "support-tickets":
+          "Reproduce a customer's incomplete filtered request, identify the missing status parameter from the evidence, correct the request, and document the fix.",
+
+        "capstone":
+          "Start from a known-good request, introduce one controlled endpoint failure, use the response and automated test as evidence, diagnose the cause, correct it, and verify the request succeeds again."
+
+      };
+
+
+      return (
+        recruiterChallenges[
+          moduleId
+        ] ||
+        tutorial?.intro ||
+        module?.challenge ||
+        ""
+      );
+
+    }
+
+    function evidenceCard(
+      key,
+      practice,
+      quiz
+    ) {
+
+      const module =
+        moduleFromMission(
+          key
+        );
+
+
+      const tutorial =
+        tutorialFromModule(
+          module
+        );
+
+
+      const title =
+        evidenceTitle(
+          key,
+          module,
+          tutorial
+        );
+
+
+      const challenge =
+        evidenceChallenge(
+          key,
+          module,
+          tutorial
+        );
+
+
+      const submitted =
+        practice.evidence?.[key] ||
+        {};
+
+
+      const completed =
+        practice.completed?.[key] === true;
+
+
+      const screenshots =
+        screenshotsFor(
+          practice.screenshots?.[key]
+        );
+
+
+      const moduleQuizPassed =
+        module
+          ? quiz.passed?.[module.id] === true
+          : false;
+
+
+      const best =
+        module
+          ? Number(
+              quiz.best?.[module.id] ||
+              0
+            )
+          : 0;
+
+
+      const questionCount =
+        quizCountFor(
+          module
+        );
+
+
+      const answers =
+        Object.entries(
+          submitted
+        )
+          .filter(
+            ([, value]) =>
+              String(
+                value ??
+                ""
+              )
+                .trim() !== ""
+          );
+
+
+      const answerHtml =
+        answers.length
+          ? `
+
+              <div class="evidence-block">
+
+                <h4>
+                  Submitted Evidence
+                </h4>
+
+                <div class="answers">
+
+                  ${
+                    answers
+                      .map(
+                        ([field, value]) => `
+
+                          <div class="answer">
+
+                            <span>
+                              ${escapeHtml(
+                                prettyField(field)
+                              )}
+                            </span>
+
+                            <strong>
+                              ${escapeHtml(value)}
+                            </strong>
+
+                          </div>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </div>
+
+              </div>
+
+            `
+          : "";
+
+
+      const screenshotHtml =
+        screenshots.length
+          ? `
+
+              <div class="evidence-block">
+
+                <h4>
+                  Work Screenshots
+                </h4>
+
+                <div class="screenshots">
+
+                  ${
+                    screenshots
+                      .map(
+                        (shot, index) => `
+
+                          <figure class="shot">
+
+                            <a
+                              href="#"
+                              class="shot-zoom"
+                              onclick="
+                                event.preventDefault();
+                                openEvidenceLightbox(
+                                  this.querySelector('img')
+                                );
+                              ">
+
+                              <img
+                                src="${shot.dataUrl}"
+                                alt="${escapeHtml(
+                                  title
+                                )} evidence ${index + 1}">
+
+                            </a>
+
+                            <figcaption>
+
+                              ${
+                                escapeHtml(
+                                  shot.caption ||
+                                  `Evidence ${index + 1}`
+                                )
+                              }
+
+                            </figcaption>
+
+                          </figure>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </div>
+
+              </div>
+
+            `
+          : "";
+
+
+      const quizHtml =
+        moduleQuizPassed
+          ? `
+
+              <span class="meta-pill">
+                ✓ Module quiz:
+                ${best}/${questionCount}
+              </span>
+
+            `
+          : "";
+
+
+      return `
+
+        <article class="evidence-card">
+
+          <div class="evidence-head">
+
+            <div>
+
+              <div class="evidence-type">
+                HANDS-ON POSTMAN LAB
+              </div>
+
+              <h3>
+                ${escapeHtml(title)}
+              </h3>
+
+            </div>
+
+
+            <span
+              class="status-badge ${
+                completed
+                  ? ""
+                  : "progress"
+              }">
+
+              ${
+                completed
+                  ? "✓ Complete"
+                  : "Evidence captured"
+              }
+
+            </span>
+
+          </div>
+
+
+          <div class="evidence-body">
+
+            ${
+              challenge
+                ? `
+
+                    <div class="evidence-block">
+
+                      <h4>
+                        Challenge
+                      </h4>
+
+                      <p>
+                        ${escapeHtml(challenge)}
+                      </p>
+
+                    </div>
+
+                  `
+                : ""
+            }
+
+
+            ${answerHtml}
+
+
+            ${screenshotHtml}
+
+
+            <div class="evidence-meta">
+
+              ${
+                completed
+                  ? `
+                      <span class="meta-pill">
+                        ✓ Hands-on lab completed
+                      </span>
+                    `
+                  : ""
+              }
+
+              ${quizHtml}
+
+              ${
+                screenshots.length
+                  ? `
+                      <span class="meta-pill">
+                        ${screenshots.length}
+                        screenshot${
+                          screenshots.length === 1
+                            ? ""
+                            : "s"
+                        }
+                        documented
+                      </span>
+                    `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    function publishedEvidenceCard(
+      item
+    ) {
+
+      const answers =
+        Object.entries(
+          item.answers ||
+          {}
+        )
+          .filter(
+            ([, value]) =>
+              String(
+                value ??
+                ""
+              )
+                .trim() !== ""
+          );
+
+
+      const screenshots =
+        Array.isArray(
+          item.screenshots
+        )
+          ? item.screenshots
+          : [];
+
+
+      const answerHtml =
+        answers.length
+          ? `
+
+              <div class="evidence-block">
+
+                <h4>
+                  Submitted Evidence
+                </h4>
+
+                <div class="answers">
+
+                  ${
+                    answers
+                      .map(
+                        ([field, value]) => `
+
+                          <div class="answer">
+
+                            <span>
+                              ${escapeHtml(
+                                prettyField(field)
+                              )}
+                            </span>
+
+                            <strong>
+                              ${escapeHtml(value)}
+                            </strong>
+
+                          </div>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </div>
+
+              </div>
+
+            `
+          : "";
+
+
+      const screenshotHtml =
+        screenshots.length
+          ? `
+
+              <div class="evidence-block">
+
+                <h4>
+                  Work Screenshots
+                </h4>
+
+                <div class="screenshots">
+
+                  ${
+                    screenshots
+                      .map(
+                        (shot, index) => `
+
+                          <figure class="shot">
+
+                            <a
+                              href="#"
+                              class="shot-zoom"
+                              onclick="
+                                event.preventDefault();
+                                openEvidenceLightbox(
+                                  this.querySelector('img')
+                                );
+                              ">
+
+                              <img
+                                src="${escapeHtml(
+                                  shot.src
+                                )}"
+                                alt="${escapeHtml(
+                                  item.title ||
+                                  "Lab evidence"
+                                )} evidence ${index + 1}">
+
+                            </a>
+
+                            <figcaption>
+
+                              ${
+                                escapeHtml(
+                                  shot.caption ||
+                                  `Evidence ${index + 1}`
+                                )
+                              }
+
+                            </figcaption>
+
+                          </figure>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </div>
+
+              </div>
+
+            `
+          : "";
+
+
+      const quizHtml =
+        item.quiz?.passed
+          ? `
+
+              <span class="meta-pill">
+                ✓ Module quiz:
+                ${Number(
+                  item.quiz.best || 0
+                )}/${Number(
+                  item.quiz.total || 5
+                )}
+              </span>
+
+            `
+          : "";
+
+
+      return `
+
+        <article class="evidence-card">
+
+          <div class="evidence-head">
+
+            <div>
+
+              <div class="evidence-type">
+                HANDS-ON POSTMAN LAB
+              </div>
+
+              <h3>
+                ${escapeHtml(
+                  item.title ||
+                  item.moduleTitle ||
+                  "API Support Exercise"
+                )}
+              </h3>
+
+            </div>
+
+
+            <span
+              class="status-badge ${
+                item.completed
+                  ? ""
+                  : "progress"
+              }">
+
+              ${
+                item.completed
+                  ? "✓ Complete"
+                  : "Evidence captured"
+              }
+
+            </span>
+
+          </div>
+
+
+          <div class="evidence-body">
+
+            ${
+              item.challenge
+                ? `
+
+                    <div class="evidence-block">
+
+                      <h4>
+                        Challenge
+                      </h4>
+
+                      <p>
+                        ${escapeHtml(
+                          item.challenge
+                        )}
+                      </p>
+
+                    </div>
+
+                  `
+                : ""
+            }
+
+
+            ${answerHtml}
+
+            ${screenshotHtml}
+
+
+            <div class="evidence-meta">
+
+              ${
+                item.completed
+                  ? `
+                      <span class="meta-pill">
+                        ✓ Hands-on lab completed
+                      </span>
+                    `
+                  : ""
+              }
+
+              ${quizHtml}
+
+              ${
+                screenshots.length
+                  ? `
+                      <span class="meta-pill">
+                        ${screenshots.length}
+                        screenshot${
+                          screenshots.length === 1
+                            ? ""
+                            : "s"
+                        }
+                        documented
+                      </span>
+                    `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }
+
+
+    function renderPublishedEvidence(
+      published
+    ) {
+
+      const grid =
+        document.getElementById(
+          "evidenceGrid"
+        );
+
+
+      const evidence =
+        Array.isArray(
+          published?.evidence
+        )
+          ? published.evidence
+          : [];
+
+
+      if (
+        evidence.length === 0
+      ) {
+
+        grid.innerHTML = `
+
+          <div class="empty-state">
+
+            Published lab evidence is being prepared.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      grid.innerHTML =
+        evidence
+          .map(
+            item =>
+              publishedEvidenceCard(
+                item
+              )
+          )
+          .join("");
+
+    }
+
+
+    async function loadPublishedEvidence() {
+
+      const grid =
+        document.getElementById(
+          "evidenceGrid"
+        );
+
+
+      try {
+
+        const response =
+          await fetch(
+            "evidence/recruiter-evidence.json",
+            {
+              cache:
+                "no-store"
+            }
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            `Evidence request failed: ${response.status}`
+          );
+
+        }
+
+
+        const published =
+          await response.json();
+
+
+        renderPublishedEvidence(
+          published
+        );
+
+      }
+      catch (
+        error
+      ) {
+
+        console.error(
+          "Unable to load published recruiter evidence:",
+          error
+        );
+
+
+        grid.innerHTML = `
+
+          <div class="empty-state">
+
+            Published lab evidence is temporarily unavailable.
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+    function renderEvidence() {
+
+      const grid =
+        document.getElementById(
+          "evidenceGrid"
+        );
+
+
+      const practice =
+        readJson(
+          practiceKey
+        );
+
+
+      const quiz =
+        readJson(
+          quizKey
+        );
+
+
+      const keys =
+        new Set([
+          ...Object.keys(
+            practice.completed ||
+            {}
+          ),
+
+          ...Object.keys(
+            practice.evidence ||
+            {}
+          ),
+
+          ...Object.keys(
+            practice.screenshots ||
+            {}
+          )
+        ]);
+
+
+      const usefulKeys =
+        [...keys]
+          .filter(
+            key => {
+
+              const completed =
+                practice.completed?.[key] === true;
+
+
+              const evidence =
+                Object.values(
+                  practice.evidence?.[key] ||
+                  {}
+                )
+                  .some(
+                    value =>
+                      String(
+                        value ??
+                        ""
+                      )
+                        .trim() !== ""
+                  );
+
+
+              const screenshots =
+                screenshotsFor(
+                  practice.screenshots?.[key]
+                )
+                  .length > 0;
+
+
+              return (
+                completed ||
+                evidence ||
+                screenshots
+              );
+
+            }
+          );
+
+
+      if (
+        usefulKeys.length === 0
+      ) {
+
+        grid.innerHTML = `
+
+          <div class="empty-state">
+
+            No submitted lab evidence has been published
+            to this browser yet.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      grid.innerHTML =
+        usefulKeys
+          .map(
+            key =>
+              evidenceCard(
+                key,
+                practice,
+                quiz
+              )
+          )
+          .join("");
+
+    }
+
+
+    if (
+      location.hostname ===
+        "localhost" ||
+      location.hostname ===
+        "127.0.0.1"
+    ) {
+
+      document
+        .getElementById(
+          "localNote"
+        )
+        .style
+        .display =
+          "block";
+
+    }
+
+
+    function buildRecruiterExport() {
+
+      const practice =
+        readJson(
+          practiceKey
+        );
+
+
+      const quiz =
+        readJson(
+          quizKey
+        );
+
+
+      const keys =
+        new Set([
+          ...Object.keys(
+            practice.completed ||
+            {}
+          ),
+
+          ...Object.keys(
+            practice.evidence ||
+            {}
+          ),
+
+          ...Object.keys(
+            practice.screenshots ||
+            {}
+          )
+        ]);
+
+
+      const evidence =
+        [...keys]
+          .map(
+            key => {
+
+              const module =
+                moduleFromMission(
+                  key
+                );
+
+
+              const tutorial =
+                tutorialFromModule(
+                  module
+                );
+
+
+              const answers =
+                practice.evidence?.[key] ||
+                {};
+
+
+              const screenshots =
+                screenshotsFor(
+                  practice.screenshots?.[key]
+                );
+
+
+              const completed =
+                practice.completed?.[key] === true;
+
+
+              const quizPassed =
+                module
+                  ? quiz.passed?.[module.id] === true
+                  : false;
+
+
+              const quizBest =
+                module
+                  ? Number(
+                      quiz.best?.[module.id] ||
+                      0
+                    )
+                  : 0;
+
+
+              const hasAnswers =
+                Object.values(
+                  answers
+                )
+                  .some(
+                    value =>
+                      String(
+                        value ??
+                        ""
+                      )
+                        .trim() !== ""
+                  );
+
+
+              if (
+                !completed &&
+                !hasAnswers &&
+                screenshots.length === 0
+              ) {
+
+                return null;
+
+              }
+
+
+              return {
+
+                key,
+
+                moduleId:
+                  module?.id ||
+                  null,
+
+                moduleTitle:
+                  module?.title ||
+                  null,
+
+                title:
+                  evidenceTitle(
+                    key,
+                    module,
+                    tutorial
+                  ),
+
+                challenge:
+                  evidenceChallenge(
+                    key,
+                    module,
+                    tutorial
+                  ),
+
+                completed,
+
+                answers,
+
+                quiz:
+                  module
+                    ? {
+                        passed:
+                          quizPassed,
+
+                        best:
+                          quizBest,
+
+                        total:
+                          quizCountFor(
+                            module
+                          )
+                      }
+                    : null,
+
+                screenshots:
+                  screenshots.map(
+                    (shot, index) => ({
+
+                      number:
+                        index + 1,
+
+                      caption:
+                        shot.caption ||
+                        "",
+
+                      dataUrl:
+                        shot.dataUrl
+
+                    })
+                  )
+
+              };
+
+            }
+          )
+          .filter(Boolean);
+
+
+      return {
+
+        schemaVersion:
+          1,
+
+        project:
+          "Neon Grove: API Support Lab",
+
+        exportType:
+          "recruiter-evidence",
+
+        exportedAt:
+          new Date()
+            .toISOString(),
+
+        summary: {
+
+          evidenceItems:
+            evidence.length,
+
+          completedLabs:
+            evidence.filter(
+              item =>
+                item.completed
+            )
+              .length,
+
+          screenshots:
+            evidence.reduce(
+              (
+                total,
+                item
+              ) =>
+                total +
+                item.screenshots.length,
+              0
+            )
+
+        },
+
+        evidence
+
+      };
+
+    }
+
+
+    function downloadRecruiterEvidence() {
+
+      const exported =
+        buildRecruiterExport();
+
+
+      if (
+        exported.evidence.length === 0
+      ) {
+
+        alert(
+          "There is no lab evidence to export yet."
+        );
+
+        return;
+
+      }
+
+
+      const json =
+        JSON.stringify(
+          exported,
+          null,
+          2
+        );
+
+
+      const blob =
+        new Blob(
+          [json],
+          {
+            type:
+              "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const date =
+        new Date()
+          .toISOString()
+          .slice(
+            0,
+            10
+          );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        `neon-grove-recruiter-evidence-${date}.json`;
+
+
+      document.body
+        .appendChild(
+          link
+        );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      setTimeout(
+        () =>
+          URL.revokeObjectURL(
+            url
+          ),
+        1000
+      );
+
+    }
+
+
+    document
+      .getElementById(
+        "exportEvidenceBtn"
+      )
+      ?.addEventListener(
+        "click",
+        downloadRecruiterEvidence
+      );
+
+    const isLocalPreview =
+      location.hostname ===
+        "localhost" ||
+      location.hostname ===
+        "127.0.0.1";
+
+
+    if (
+      isLocalPreview
+    ) {
+
+      /*
+        Development mode:
+        show Jay's newest browser evidence immediately.
+      */
+      renderEvidence();
+
+    }
+    else {
+
+      /*
+        Public portfolio mode:
+        use evidence committed with the repository.
+      */
+      loadPublishedEvidence();
+
+    }
+
+  </script>
+
+
+  <script>
+    /* NEON GROVE PUBLIC RECRUITER VIEW GUARD */
+
+    (() => {
+
+      const isLocal =
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1" ||
+        location.protocol === "file:";
+
+
+      if (!isLocal) {
+
+        document
+          .getElementById(
+            "exportEvidenceBtn"
+          )
+          ?.remove();
+
+
+        document
+          .getElementById(
+            "localNote"
+          )
+          ?.remove();
+
+      }
+
+    })();
+  </script>
 </body>
+
 </html>
