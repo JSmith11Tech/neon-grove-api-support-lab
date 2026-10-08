@@ -1,5 +1,9 @@
 # Neon Grove: API Support Lab
 
+**Live demo:** https://jsmith11tech.github.io/neon-grove-api-support-lab/
+
+**Recruiter View:** https://jsmith11tech.github.io/neon-grove-api-support-lab/technical.html
+
 Neon Grove is a hands-on API support and troubleshooting project I built while developing practical REST API and Postman skills.
 
 Instead of stopping at lessons or quizzes, I used the project to practice building requests, inspecting responses, reproducing failures, testing hypotheses, documenting evidence, and working through support-style scenarios.
